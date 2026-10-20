@@ -1,0 +1,4 @@
+Getting dependency tree...
+dot  -Tpdf \
+	-o /work/output/graphs/graph-depends.pdf \
+	/work/output/graphs/graph-depends.dot

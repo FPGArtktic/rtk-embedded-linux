@@ -1,0 +1,12 @@
+mkdir -p /work/output/build/buildroot-config/lxdialog
+PKG_CONFIG_PATH="" make CC="/usr/bin/gcc" HOSTCC="/usr/bin/gcc" \
+    obj=/work/output/build/buildroot-config -C support/kconfig -f Makefile.br conf
+/usr/bin/gcc -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE  -I/work/output/build/buildroot-config -DCONFIG_=\"\"  -MM *.c > /work/output/build/buildroot-config/.depend 2>/dev/null || :
+/usr/bin/gcc -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE  -I/work/output/build/buildroot-config -DCONFIG_=\"\"   -c conf.c -o /work/output/build/buildroot-config/conf.o
+/usr/bin/gcc -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE  -I/work/output/build/buildroot-config -DCONFIG_=\"\"  -I. -c /work/output/build/buildroot-config/zconf.tab.c -o /work/output/build/buildroot-config/zconf.tab.o
+/usr/bin/gcc -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE  -I/work/output/build/buildroot-config -DCONFIG_=\"\"   /work/output/build/buildroot-config/conf.o /work/output/build/buildroot-config/zconf.tab.o  -o /work/output/build/buildroot-config/conf
+rm /work/output/build/buildroot-config/zconf.tab.c
+  GEN     /work/output/Makefile
+#
+# configuration written to /work/output/.config
+#

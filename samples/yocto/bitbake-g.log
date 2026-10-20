@@ -1,0 +1,5 @@
+Loading cache...done.
+Loaded 1925 entries from dependency cache.
+NOTE: Resolving any missing task queue dependencies
+NOTE: PN build list saved to 'pn-buildlist'
+NOTE: Task dependencies saved to 'task-depends.dot'

@@ -1,0 +1,41 @@
+Loading cache...done.
+Loaded 1925 entries from dependency cache.
+NOTE: Resolving any missing task queue dependencies
+
+Build Configuration:
+BB_VERSION           = "2.8.1"
+BUILD_SYS            = "x86_64-linux"
+NATIVELSBSTRING      = "universal"
+TARGET_SYS           = "aarch64-poky-linux"
+MACHINE              = "raspberrypi4-64"
+DISTRO               = "poky"
+DISTRO_VERSION       = "5.0.20"
+TUNE_FEATURES        = "aarch64 crc cortexa72"
+TARGET_FPU           = ""
+meta                 
+meta-poky            
+meta-yocto-bsp       
+meta-raspberrypi     
+meta-rpi-ref         = "<unknown>:<unknown>"
+
+Initialising tasks...Sstate summary: Wanted 10 Local 0 Mirrors 0 Missed 10 Current 267 (0% match, 96% complete)
+done.
+NOTE: Executing Tasks
+NOTE: Running task 782 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fetch-fail/rtk-fetch-fail.bb:do_recipe_qa)
+NOTE: recipe rtk-fetch-fail-1.0-r0: task do_recipe_qa: Started
+NOTE: recipe rtk-fetch-fail-1.0-r0: task do_recipe_qa: Succeeded
+NOTE: Running task 826 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fetch-fail/rtk-fetch-fail.bb:do_fetch)
+NOTE: recipe rtk-fetch-fail-1.0-r0: task do_fetch: Started
+WARNING: rtk-fetch-fail-1.0-r0 do_fetch: Failed to fetch URL https://downloads.example.invalid/rtk-fetch-fail-1.0.tar.gz, attempting MIRRORS if available
+ERROR: rtk-fetch-fail-1.0-r0 do_fetch: Fetcher failure: Fetch command export PSEUDO_DISABLED=1; export PATH="/work/build/tmp/sysroots-uninative/x86_64-linux/usr/bin:/ref/yocto/poky/scripts:/work/build/tmp/work/cortexa72-poky-linux/rtk-fetch-fail/1.0/recipe-sysroot-native/usr/bin/aarch64-poky-linux:/work/build/tmp/work/cortexa72-poky-linux/rtk-fetch-fail/1.0/recipe-sysroot/usr/bin/crossscripts:/work/build/tmp/work/cortexa72-poky-linux/rtk-fetch-fail/1.0/recipe-sysroot-native/usr/sbin:/work/build/tmp/work/cortexa72-poky-linux/rtk-fetch-fail/1.0/recipe-sysroot-native/usr/bin:/work/build/tmp/work/cortexa72-poky-linux/rtk-fetch-fail/1.0/recipe-sysroot-native/sbin:/work/build/tmp/work/cortexa72-poky-linux/rtk-fetch-fail/1.0/recipe-sysroot-native/bin:/ref/yocto/poky/bitbake/bin:/work/build/tmp/hosttools"; export HOME="/home/ubuntu"; /usr/bin/env wget -t 2 -T 100 -O /work/downloads/rtk-fetch-fail-1.0.tar.gz.tmp -P /work/downloads 'https://downloads.example.invalid/rtk-fetch-fail-1.0.tar.gz' --progress=dot -v failed with exit code 4, see logfile for output
+ERROR: rtk-fetch-fail-1.0-r0 do_fetch: Bitbake Fetcher Error: FetchError('Unable to fetch URL from any source.', 'https://downloads.example.invalid/rtk-fetch-fail-1.0.tar.gz')
+ERROR: Logfile of failure stored in: /work/build/tmp/work/cortexa72-poky-linux/rtk-fetch-fail/1.0/temp/log.do_fetch.124
+NOTE: recipe rtk-fetch-fail-1.0-r0: task do_fetch: Failed
+ERROR: Task (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fetch-fail/rtk-fetch-fail.bb:do_fetch) failed with exit code '1'
+NOTE: Tasks Summary: Attempted 826 tasks of which 824 didn't need to be rerun and 1 failed.
+
+Summary: 1 task failed:
+  /ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fetch-fail/rtk-fetch-fail.bb:do_fetch
+    log: /work/build/tmp/work/cortexa72-poky-linux/rtk-fetch-fail/1.0/temp/log.do_fetch.124
+Summary: There was 1 WARNING message.
+Summary: There were 2 ERROR messages, returning a non-zero exit code.

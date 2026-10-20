@@ -1,0 +1,8 @@
+NOTE: Starting bitbake server...
+layer                 path                                                                    priority
+========================================================================================================
+core                  /ref/yocto/poky/meta                                                    5
+yocto                 /ref/yocto/poky/meta-poky                                               5
+yoctobsp              /ref/yocto/poky/meta-yocto-bsp                                          5
+raspberrypi           /ref/yocto/poky/../meta-raspberrypi                                     9
+rpi-ref               /ref/yocto/poky/../meta-rpi-ref                                         10

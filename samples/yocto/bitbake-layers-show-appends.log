@@ -1,0 +1,75 @@
+NOTE: Starting bitbake server...
+Loading cache...done.
+Loaded 1925 entries from dependency cache.
+=== Appended recipes ===
+base-files_3.0.14.bb:
+  /ref/yocto/poky/meta-poky/recipes-core/base-files/base-files_%.bbappend
+bluez5_5.72.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-connectivity/bluez5/bluez5_%.bbappend
+busybox_1.36.1.bb:
+  /ref/yocto/poky/meta-poky/recipes-core/busybox/busybox_%.bbappend
+cairo_1.18.0.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/cairo/cairo_%.bbappend
+formfactor_0.0.bb:
+  /ref/yocto/poky/meta-yocto-bsp/recipes-bsp/formfactor/formfactor_0.0.bbappend
+  /ref/yocto/poky/../meta-raspberrypi/recipes-bsp/formfactor/formfactor_%.bbappend
+gstreamer1.0-plugins-bad_1.22.12.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-multimedia/gstreamer/gstreamer1.0-plugins-bad_%.bbappend
+gstreamer1.0-plugins-base_1.22.12.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-multimedia/gstreamer/gstreamer1.0-plugins-base_%.bbappend
+gstreamer1.0-plugins-good_1.22.12.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-multimedia/gstreamer/gstreamer1.0-plugins-good_%.bbappend
+kmscube_git.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/kmscube/kmscube_%.bbappend
+libglu_9.0.3.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/mesa/libglu_%.bbappend
+libsdl2_2.30.1.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/libsdl2/libsdl2_%.bbappend
+libva_2.20.0.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/libva/libva_%.bbappend
+mesa_25.1.6.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/mesa/mesa_%.bbappend
+mesa_24.0.7.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/mesa/mesa_%.bbappend
+mesa-demos_8.5.0.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/mesa/mesa-demos_%.bbappend
+packagegroup-core-tools-testapps.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-core/packagegroups/packagegroup-core-tools-testapps.bbappend
+piglit_git.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/piglit/piglit_%.bbappend
+psplash_git.bb:
+  /ref/yocto/poky/meta-poky/recipes-core/psplash/psplash_git.bbappend
+  /ref/yocto/poky/../meta-raspberrypi/recipes-core/psplash/psplash_%.bbappend
+u-boot_2024.01.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-bsp/u-boot/u-boot_%.bbappend
+wayland_1.22.0.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/wayland/wayland_%.bbappend
+weston_13.0.1.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/wayland/weston_%.bbappend
+weston-init.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/wayland/weston-init.bbappend
+xserver-xf86-config_0.1.bb:
+  /ref/yocto/poky/meta-yocto-bsp/recipes-graphics/xorg-xserver/xserver-xf86-config_0.1.bbappend
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/xorg-xserver/xserver-xf86-config_%.bbappend
+xserver-xorg_21.1.18.bb:
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/xorg-xserver/xserver-xorg_%.bbappend
+mesa_25.1.6.bb (skipped):
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/mesa/mesa_%.bbappend
+mesa_25.1.6.bb (skipped):
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/mesa/mesa_%.bbappend
+mesa-gl_24.0.7.bb (skipped):
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/mesa/mesa-gl_%.bbappend
+linux-yocto-dev.bb (skipped):
+  /ref/yocto/poky/meta-yocto-bsp/recipes-kernel/linux/linux-yocto-dev.bbappend
+linux-yocto_6.6.bb (skipped):
+  /ref/yocto/poky/meta-yocto-bsp/recipes-kernel/linux/linux-yocto_6.6.bbappend
+gstreamer1.0-omx_1.22.12.bb (skipped):
+  /ref/yocto/poky/../meta-raspberrypi/recipes-multimedia/gstreamer/gstreamer1.0-omx_%.bbappend
+x264_git.bb (skipped):
+  /ref/yocto/poky/../meta-raspberrypi/recipes-multimedia/x264/x264_%.bbappend
+linux-yocto_6.6.bb (skipped):
+  /ref/yocto/poky/meta-yocto-bsp/recipes-kernel/linux/linux-yocto_6.6.bbappend
+mesa-gl_24.0.7.bb (skipped):
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/mesa/mesa-gl_%.bbappend
+mesa-gl_24.0.7.bb (skipped):
+  /ref/yocto/poky/../meta-raspberrypi/recipes-graphics/mesa/mesa-gl_%.bbappend

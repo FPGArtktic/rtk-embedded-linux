@@ -1,0 +1,108 @@
+>>>   Buildroot 2026.02.3 Collecting legal info
+COPYING: OK (sha256: 9755181e27175cb3510b4da8629caa406fb355a19aa8e7d55f06bf8ab33323c4)
+>>> toolchain-external  Collecting legal info
+>>> host-skeleton  Collecting legal info
+>>> skeleton  Collecting legal info
+>>> skeleton-init-sysv  Collecting legal info
+>>> skeleton-init-common  Collecting legal info
+>>> toolchain-external-bootlin 2025.08-1 Collecting legal info
+>>> toolchain  Collecting legal info
+>>> busybox 1.37.0 Collecting legal info
+LICENSE: OK (sha256: bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548)
+archival/libarchive/bz/LICENSE: OK (sha256: b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f)
+>>> kmod 33 Collecting legal info
+libkmod/COPYING: OK (sha256: 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3)
+COPYING: OK (sha256: 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3)
+>>> host-pkgconf 2.3.0 Collecting legal info
+COPYING: OK (sha256: 07ee94b50a41ee3fc4e13a9b9c60b26fc28488494c465639f7e5f07a3952ec04)
+>>> xz 5.8.3 Collecting legal info
+COPYING: OK (sha256: 616a3ad264ce29b8f1cb97e53037b139d406899ca8d1f799651e17bfa09830b8)
+COPYING.0BSD: OK (sha256: 0b01625d853911cd0e2e088dcfb743261034a091bb379246cb25a14cc4c74bf1)
+COPYING.GPLv2: OK (sha256: edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6)
+COPYING.GPLv3: OK (sha256: 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986)
+COPYING.LGPLv2.1: OK (sha256: 20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95)
+>>> host-autoconf 2.72 Collecting legal info
+COPYINGv3: OK (sha256: 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986)
+COPYING.EXCEPTION: OK (sha256: 1f1cde9fb68b9b3cff18c420894bec5bd4defacd700b7d13df54a887301e5350)
+>>> host-libtool 2.4.6 Collecting legal info
+COPYING: OK (sha256: 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643)
+libltdl/COPYING.LIB: OK (sha256: dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551)
+>>> host-m4 1.4.21 Collecting legal info
+COPYING: OK (sha256: 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986)
+>>> host-automake 1.16.5 Collecting legal info
+COPYING: OK (sha256: ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6)
+>>> host-dosfstools 4.2 Collecting legal info
+COPYING: OK (sha256: 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903)
+>>> host-e2fsprogs 1.47.3 Collecting legal info
+NOTICE: OK (sha256: 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020)
+lib/ss/mit-sipb-copyright.h: OK (sha256: 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d)
+lib/et/internal.h: OK (sha256: 47182fe6631a32f271a15bbe210751b3825b7199f588879aac7d4804fc8b4b8f)
+>>> host-autoconf-archive 2023.02.20 Collecting legal info
+COPYING: OK (sha256: e6037104443f9a7829b2aa7c5370d0789a7bda3ca65a0b904cdc0c2e285d9195)
+COPYING.EXCEPTION: OK (sha256: 23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2)
+>>> host-gettext  Collecting legal info
+>>> host-gettext-tiny 0.3.2 Collecting legal info
+LICENSE: OK (sha256: 4c938aa3d8fa3c184bba5e87a8a2febc89560627c9d0567536879e3eca1a7b4f)
+extra/COPYING: OK (sha256: e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b)
+>>> host-util-linux 2.41.4 Collecting legal info
+README.licensing: OK (sha256: 4c2db318192bda62f3f8fcf71488bb5e602ae4385eba281d711b46cc13a40bb3)
+Documentation/licenses/COPYING.BSD-2-Clause: OK (sha256: 527f738966ca396cd5a68c1509390de2a780c6b614d9ee57f7544a6161938ed1)
+Documentation/licenses/COPYING.BSD-3-Clause: OK (sha256: 9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d)
+Documentation/licenses/COPYING.BSD-4-Clause-UC: OK (sha256: ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8)
+Documentation/licenses/COPYING.EUPL-1.2: OK (sha256: 6fc9e709ccbfe0d77fbffa2427a983282be2eb88e47b1cdb49f21a83b4d1e665)
+Documentation/licenses/COPYING.GPL-2.0-only: OK (sha256: 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643)
+Documentation/licenses/COPYING.GPL-2.0-or-later: OK (sha256: 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643)
+Documentation/licenses/COPYING.GPL-3.0-or-later: OK (sha256: 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986)
+Documentation/licenses/COPYING.ISC: OK (sha256: e53348ce276358e9997014071c5294b36a18c4b34f32f00ee57b9acce0aafd63)
+Documentation/licenses/COPYING.LGPL-2.1-or-later: OK (sha256: dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551)
+Documentation/licenses/COPYING.MIT: OK (sha256: 8555341619542abb48c102afd954e42d4478e5be16ad3d5af7b0ff71009e7348)
+>>> host-zlib  Collecting legal info
+>>> host-libzlib 1.3.2 Collecting legal info
+LICENSE: OK (sha256: e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2)
+>>> host-genimage 19 Collecting legal info
+COPYING: OK (sha256: edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6)
+>>> host-libconfuse 3.3 Collecting legal info
+LICENSE: OK (sha256: dc3ff4b62f851dd2e94a151061ffeb7d28ddfc880a442068dc5283dbaa927306)
+>>> ifupdown-scripts  Collecting legal info
+>>> initscripts  Collecting legal info
+>>> host-kmod 33 Collecting legal info
+libkmod/COPYING: OK (sha256: 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3)
+COPYING: OK (sha256: 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3)
+>>> host-xz 5.8.3 Collecting legal info
+COPYING: OK (sha256: 616a3ad264ce29b8f1cb97e53037b139d406899ca8d1f799651e17bfa09830b8)
+COPYING.0BSD: OK (sha256: 0b01625d853911cd0e2e088dcfb743261034a091bb379246cb25a14cc4c74bf1)
+COPYING.GPLv2: OK (sha256: edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6)
+COPYING.GPLv3: OK (sha256: 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986)
+COPYING.LGPLv2.1: OK (sha256: 20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95)
+>>> host-mtools 4.0.48 Collecting legal info
+COPYING: OK (sha256: 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903)
+>>> host-lzip 1.25 Collecting legal info
+COPYING: OK (sha256: 022e9c2e9cc1aac3622313df6f971fbb39c1d1b0cb45324c16b8a1fe231c5ea6)
+>>> host-patchelf 0.13 Collecting legal info
+COPYING: OK (sha256: 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903)
+>>> rpi-firmware 063bcab6c8a90efb0d19f69d88cbbc7ec79cab68 Collecting legal info
+boot/LICENCE.broadcom: OK (sha256: c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b)
+>>> urandom-scripts  Collecting legal info
+>>> linux custom Collecting legal info
+ERROR: No hash found for COPYING
+ERROR: No hash found for LICENSES/preferred/GPL-2.0
+ERROR: No hash found for LICENSES/exceptions/Linux-syscall-note
+>>> host-bison 3.8.2 Collecting legal info
+COPYING: OK (sha256: 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986)
+>>> host-flex 2.6.4 Collecting legal info
+COPYING: OK (sha256: 97fd685958d93be7f8dab939bb8161dbd6afb0718c63bfc337c24321aea44273)
+>>> host-openssl  Collecting legal info
+>>> host-libopenssl 3.6.2 Collecting legal info
+LICENSE.txt: OK (sha256: 7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a)
+>>> host-acl 2.3.2 Collecting legal info
+doc/COPYING: OK (sha256: a45a845012742796534f7e91fe623262ccfb99460a2bd04015bd28d66fba95b8)
+doc/COPYING.LGPL: OK (sha256: 01b1f9f2c8ee648a7a596a1abe8aa4ed7899b1c9e5551bda06da6e422b04aa55)
+>>> host-attr 2.5.2 Collecting legal info
+doc/COPYING: OK (sha256: 98f318493be6b08bff3cd295791cde06c54e17882a3c74a1ed245eaa02533d52)
+doc/COPYING.LGPL: OK (sha256: 5decad7e58d90d44335bf2f45ce27563bd911065c6a1a02dfa7647c4efee75c8)
+>>> host-fakeroot 1.37.1.2 Collecting legal info
+COPYING: OK (sha256: fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7)
+>>> host-makedevs  Collecting legal info
+WARNING: the Buildroot source code has not been saved
+WARNING: toolchain-external-bootlin-2025.08-1: cannot save license (TOOLCHAIN_EXTERNAL_BOOTLIN_LICENSE_FILES not defined)
+Legal info produced in /work/output/legal-info

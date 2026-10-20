@@ -1,0 +1,70 @@
+Loading cache...done.
+Loaded 1925 entries from dependency cache.
+NOTE: Resolving any missing task queue dependencies
+
+Build Configuration:
+BB_VERSION           = "2.8.1"
+BUILD_SYS            = "x86_64-linux"
+NATIVELSBSTRING      = "universal"
+TARGET_SYS           = "aarch64-poky-linux"
+MACHINE              = "raspberrypi4-64"
+DISTRO               = "poky"
+DISTRO_VERSION       = "5.0.20"
+TUNE_FEATURES        = "aarch64 crc cortexa72"
+TARGET_FPU           = ""
+meta                 
+meta-poky            
+meta-yocto-bsp       
+meta-raspberrypi     
+meta-rpi-ref         = "<unknown>:<unknown>"
+
+Initialising tasks...Sstate summary: Wanted 10 Local 0 Mirrors 0 Missed 10 Current 267 (0% match, 96% complete)
+done.
+NOTE: Executing Tasks
+NOTE: Running task 782 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_recipe_qa)
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_recipe_qa: Started
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_recipe_qa: Succeeded
+NOTE: Running task 826 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_fetch)
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_fetch: Started
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_fetch: Succeeded
+NOTE: Running task 827 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_unpack)
+NOTE: Running task 828 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_prepare_recipe_sysroot)
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_unpack: Started
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_prepare_recipe_sysroot: Started
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_unpack: Succeeded
+NOTE: Running task 829 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_patch)
+NOTE: Running task 830 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_collect_spdx_deps)
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_patch: Started
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_collect_spdx_deps: Started
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_prepare_recipe_sysroot: Succeeded
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_collect_spdx_deps: Succeeded
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_patch: Succeeded
+NOTE: Running task 831 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_deploy_source_date_epoch)
+NOTE: Running task 832 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_populate_lic)
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_populate_lic: Started
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_deploy_source_date_epoch: Started
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_deploy_source_date_epoch: Succeeded
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_populate_lic: Succeeded
+NOTE: Running task 833 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_configure)
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_configure: Started
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_configure: Succeeded
+NOTE: Running task 834 of 843 (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_compile)
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_compile: Started
+ERROR: rtk-fail-compile-1.0-r0 do_compile: ExecutionError('/work/build/tmp/work/cortexa72-poky-linux/rtk-fail-compile/1.0/temp/run.do_compile.288', 1, None, None)
+ERROR: Logfile of failure stored in: /work/build/tmp/work/cortexa72-poky-linux/rtk-fail-compile/1.0/temp/log.do_compile.288
+Log data follows:
+| DEBUG: Executing shell function do_compile
+| rtk-fail-compile.c: In function 'main':
+| rtk-fail-compile.c:7:9: error: 'count' undeclared (first use in this function)
+|     7 |         count += i;
+|       |         ^~~~~
+| rtk-fail-compile.c:7:9: note: each undeclared identifier is reported only once for each function it appears in
+| WARNING: exit code 1 from a shell command.
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_compile: Failed
+ERROR: Task (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_compile) failed with exit code '1'
+NOTE: Tasks Summary: Attempted 834 tasks of which 824 didn't need to be rerun and 1 failed.
+
+Summary: 1 task failed:
+  /ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_compile
+    log: /work/build/tmp/work/cortexa72-poky-linux/rtk-fail-compile/1.0/temp/log.do_compile.288
+Summary: There was 1 ERROR message, returning a non-zero exit code.

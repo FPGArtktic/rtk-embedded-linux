@@ -1,0 +1,311 @@
+rm -f /work/output/build/busybox-1.37.0/.stamp_installed
+rm -f /work/output/build/busybox-1.37.0/.stamp_staging_installed
+rm -f /work/output/build/busybox-1.37.0/.stamp_target_installed
+rm -f /work/output/build/busybox-1.37.0/.stamp_images_installed
+rm -f /work/output/build/busybox-1.37.0/.stamp_host_installed
+rm -f /work/output/build/busybox-1.37.0/.stamp_built
+>>> busybox 1.37.0 Building
+GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" /usr/bin/make -j17 AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y -C /work/output/build/busybox-1.37.0
+>>> busybox 1.37.0 Installing to target
+# Use the 'noclobber' install rule, to prevent BusyBox from overwriting
+# any full-blown versions of apps installed by other packages.
+GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" /usr/bin/make -j17 AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y -C /work/output/build/busybox-1.37.0 install-noclobber
+  /work/output/target//bin/arch already exists
+  /work/output/target//bin/ash already exists
+  /work/output/target//bin/base32 already exists
+  /work/output/target//bin/base64 already exists
+  /work/output/target//bin/cat already exists
+  /work/output/target//bin/chattr already exists
+  /work/output/target//bin/chgrp already exists
+  /work/output/target//bin/chmod already exists
+  /work/output/target//bin/chown already exists
+  /work/output/target//bin/cp already exists
+  /work/output/target//bin/cpio already exists
+  /work/output/target//bin/date already exists
+  /work/output/target//bin/dd already exists
+  /work/output/target//bin/df already exists
+  /work/output/target//bin/dmesg already exists
+  /work/output/target//bin/dnsdomainname already exists
+  /work/output/target//bin/dumpkmap already exists
+  /work/output/target//bin/echo already exists
+  /work/output/target//bin/egrep already exists
+  /work/output/target//bin/false already exists
+  /work/output/target//bin/fdflush already exists
+  /work/output/target//bin/fgrep already exists
+  /work/output/target//bin/getopt already exists
+  /work/output/target//bin/grep already exists
+  /work/output/target//bin/gunzip already exists
+  /work/output/target//bin/gzip already exists
+  /work/output/target//bin/hostname already exists
+  /work/output/target//bin/kill already exists
+  /work/output/target//bin/link already exists
+  /work/output/target//bin/linux32 already exists
+  /work/output/target//bin/linux64 already exists
+  /work/output/target//bin/ln already exists
+  /work/output/target//bin/login already exists
+  /work/output/target//bin/ls already exists
+  /work/output/target//bin/lsattr already exists
+  /work/output/target//bin/mkdir already exists
+  /work/output/target//bin/mknod already exists
+  /work/output/target//bin/mktemp already exists
+  /work/output/target//bin/more already exists
+  /work/output/target//bin/mount already exists
+  /work/output/target//bin/mountpoint already exists
+  /work/output/target//bin/mt already exists
+  /work/output/target//bin/mv already exists
+  /work/output/target//bin/netstat already exists
+  /work/output/target//bin/nice already exists
+  /work/output/target//bin/nuke already exists
+  /work/output/target//bin/pidof already exists
+  /work/output/target//bin/ping already exists
+  /work/output/target//bin/pipe_progress already exists
+  /work/output/target//bin/printenv already exists
+  /work/output/target//bin/ps already exists
+  /work/output/target//bin/pwd already exists
+  /work/output/target//bin/resume already exists
+  /work/output/target//bin/rm already exists
+  /work/output/target//bin/rmdir already exists
+  /work/output/target//bin/run-parts already exists
+  /work/output/target//bin/sed already exists
+  /work/output/target//bin/setarch already exists
+  /work/output/target//bin/setpriv already exists
+  /work/output/target//bin/setserial already exists
+  /work/output/target//bin/sh already exists
+  /work/output/target//bin/sleep already exists
+  /work/output/target//bin/stty already exists
+  /work/output/target//bin/su already exists
+  /work/output/target//bin/sync already exists
+  /work/output/target//bin/tar already exists
+  /work/output/target//bin/touch already exists
+  /work/output/target//bin/true already exists
+  /work/output/target//bin/umount already exists
+  /work/output/target//bin/uname already exists
+  /work/output/target//bin/usleep already exists
+  /work/output/target//bin/vi already exists
+  /work/output/target//bin/watch already exists
+  /work/output/target//bin/zcat already exists
+  /work/output/target//linuxrc already exists
+  /work/output/target//sbin/arp already exists
+  /work/output/target//sbin/blkid already exists
+  /work/output/target//sbin/devmem already exists
+  /work/output/target//sbin/fdisk already exists
+  /work/output/target//sbin/freeramdisk already exists
+  /work/output/target//sbin/fsck already exists
+  /work/output/target//sbin/fstrim already exists
+  /work/output/target//sbin/getty already exists
+  /work/output/target//sbin/halt already exists
+  /work/output/target//sbin/hdparm already exists
+  /work/output/target//sbin/hwclock already exists
+  /work/output/target//sbin/ifconfig already exists
+  /work/output/target//sbin/ifdown already exists
+  /work/output/target//sbin/ifup already exists
+  /work/output/target//sbin/init already exists
+  /work/output/target//sbin/insmod already exists
+  /work/output/target//sbin/ip already exists
+  /work/output/target//sbin/ipaddr already exists
+  /work/output/target//sbin/iplink already exists
+  /work/output/target//sbin/ipneigh already exists
+  /work/output/target//sbin/iproute already exists
+  /work/output/target//sbin/iprule already exists
+  /work/output/target//sbin/iptunnel already exists
+  /work/output/target//sbin/klogd already exists
+  /work/output/target//sbin/loadkmap already exists
+  /work/output/target//sbin/losetup already exists
+  /work/output/target//sbin/lsmod already exists
+  /work/output/target//sbin/makedevs already exists
+  /work/output/target//sbin/mdev already exists
+  /work/output/target//sbin/mkdosfs already exists
+  /work/output/target//sbin/mke2fs already exists
+  /work/output/target//sbin/mkswap already exists
+  /work/output/target//sbin/modprobe already exists
+  /work/output/target//sbin/nameif already exists
+  /work/output/target//sbin/pivot_root already exists
+  /work/output/target//sbin/poweroff already exists
+  /work/output/target//sbin/reboot already exists
+  /work/output/target//sbin/rmmod already exists
+  /work/output/target//sbin/route already exists
+  /work/output/target//sbin/run-init already exists
+  /work/output/target//sbin/runlevel already exists
+  /work/output/target//sbin/setconsole already exists
+  /work/output/target//sbin/start-stop-daemon already exists
+  /work/output/target//sbin/sulogin already exists
+  /work/output/target//sbin/swapoff already exists
+  /work/output/target//sbin/swapon already exists
+  /work/output/target//sbin/switch_root already exists
+  /work/output/target//sbin/sysctl already exists
+  /work/output/target//sbin/syslogd already exists
+  /work/output/target//sbin/udhcpc already exists
+  /work/output/target//sbin/uevent already exists
+  /work/output/target//sbin/vconfig already exists
+  /work/output/target//sbin/watchdog already exists
+  /work/output/target//usr/bin/[ already exists
+  /work/output/target//usr/bin/[[ already exists
+  /work/output/target//usr/bin/ar already exists
+  /work/output/target//usr/bin/ascii already exists
+  /work/output/target//usr/bin/awk already exists
+  /work/output/target//usr/bin/basename already exists
+  /work/output/target//usr/bin/bc already exists
+  /work/output/target//usr/bin/bunzip2 already exists
+  /work/output/target//usr/bin/bzcat already exists
+  /work/output/target//usr/bin/chrt already exists
+  /work/output/target//usr/bin/chvt already exists
+  /work/output/target//usr/bin/cksum already exists
+  /work/output/target//usr/bin/clear already exists
+  /work/output/target//usr/bin/cmp already exists
+  /work/output/target//usr/bin/crc32 already exists
+  /work/output/target//usr/bin/crontab already exists
+  /work/output/target//usr/bin/cut already exists
+  /work/output/target//usr/bin/dc already exists
+  /work/output/target//usr/bin/deallocvt already exists
+  /work/output/target//usr/bin/diff already exists
+  /work/output/target//usr/bin/dirname already exists
+  /work/output/target//usr/bin/dos2unix already exists
+  /work/output/target//usr/bin/du already exists
+  /work/output/target//usr/bin/eject already exists
+  /work/output/target//usr/bin/env already exists
+  /work/output/target//usr/bin/expr already exists
+  /work/output/target//usr/bin/factor already exists
+  /work/output/target//usr/bin/fallocate already exists
+  /work/output/target//usr/bin/find already exists
+  /work/output/target//usr/bin/flock already exists
+  /work/output/target//usr/bin/fold already exists
+  /work/output/target//usr/bin/free already exists
+  /work/output/target//usr/bin/fuser already exists
+  /work/output/target//usr/bin/getfattr already exists
+  /work/output/target//usr/bin/head already exists
+  /work/output/target//usr/bin/hexdump already exists
+  /work/output/target//usr/bin/hexedit already exists
+  /work/output/target//usr/bin/hostid already exists
+  /work/output/target//usr/bin/id already exists
+  /work/output/target//usr/bin/install already exists
+  /work/output/target//usr/bin/ipcrm already exists
+  /work/output/target//usr/bin/ipcs already exists
+  /work/output/target//usr/bin/killall already exists
+  /work/output/target//usr/bin/last already exists
+  /work/output/target//usr/bin/less already exists
+  /work/output/target//usr/bin/logger already exists
+  /work/output/target//usr/bin/logname already exists
+  /work/output/target//usr/bin/lsof already exists
+  /work/output/target//usr/bin/lspci already exists
+  /work/output/target//usr/bin/lsscsi already exists
+  /work/output/target//usr/bin/lsusb already exists
+  /work/output/target//usr/bin/lzcat already exists
+  /work/output/target//usr/bin/lzma already exists
+  /work/output/target//usr/bin/lzopcat already exists
+  /work/output/target//usr/bin/md5sum already exists
+  /work/output/target//usr/bin/mesg already exists
+  /work/output/target//usr/bin/microcom already exists
+  /work/output/target//usr/bin/mkfifo already exists
+  /work/output/target//usr/bin/mkpasswd already exists
+  /work/output/target//usr/bin/nl already exists
+  /work/output/target//usr/bin/nohup already exists
+  /work/output/target//usr/bin/nproc already exists
+  /work/output/target//usr/bin/nslookup already exists
+  /work/output/target//usr/bin/od already exists
+  /work/output/target//usr/bin/openvt already exists
+  /work/output/target//usr/bin/passwd already exists
+  /work/output/target//usr/bin/paste already exists
+  /work/output/target//usr/bin/patch already exists
+  /work/output/target//usr/bin/printf already exists
+  /work/output/target//usr/bin/readlink already exists
+  /work/output/target//usr/bin/realpath already exists
+  /work/output/target//usr/bin/renice already exists
+  /work/output/target//usr/bin/reset already exists
+  /work/output/target//usr/bin/resize already exists
+  /work/output/target//usr/bin/seq already exists
+  /work/output/target//usr/bin/setfattr already exists
+  /work/output/target//usr/bin/setkeycodes already exists
+  /work/output/target//usr/bin/setsid already exists
+  /work/output/target//usr/bin/sha1sum already exists
+  /work/output/target//usr/bin/sha256sum already exists
+  /work/output/target//usr/bin/sha3sum already exists
+  /work/output/target//usr/bin/sha512sum already exists
+  /work/output/target//usr/bin/shred already exists
+  /work/output/target//usr/bin/sort already exists
+  /work/output/target//usr/bin/strings already exists
+  /work/output/target//usr/bin/svc already exists
+  /work/output/target//usr/bin/svok already exists
+  /work/output/target//usr/bin/tail already exists
+  /work/output/target//usr/bin/tee already exists
+  /work/output/target//usr/bin/telnet already exists
+  /work/output/target//usr/bin/test already exists
+  /work/output/target//usr/bin/tftp already exists
+  /work/output/target//usr/bin/time already exists
+  /work/output/target//usr/bin/top already exists
+  /work/output/target//usr/bin/tr already exists
+  /work/output/target//usr/bin/traceroute already exists
+  /work/output/target//usr/bin/tree already exists
+  /work/output/target//usr/bin/truncate already exists
+  /work/output/target//usr/bin/ts already exists
+  /work/output/target//usr/bin/tsort already exists
+  /work/output/target//usr/bin/tty already exists
+  /work/output/target//usr/bin/uniq already exists
+  /work/output/target//usr/bin/unix2dos already exists
+  /work/output/target//usr/bin/unlink already exists
+  /work/output/target//usr/bin/unlzma already exists
+  /work/output/target//usr/bin/unlzop already exists
+  /work/output/target//usr/bin/unxz already exists
+  /work/output/target//usr/bin/unzip already exists
+  /work/output/target//usr/bin/uptime already exists
+  /work/output/target//usr/bin/uudecode already exists
+  /work/output/target//usr/bin/uuencode already exists
+  /work/output/target//usr/bin/vlock already exists
+  /work/output/target//usr/bin/w already exists
+  /work/output/target//usr/bin/wc already exists
+  /work/output/target//usr/bin/wget already exists
+  /work/output/target//usr/bin/which already exists
+  /work/output/target//usr/bin/who already exists
+  /work/output/target//usr/bin/whoami already exists
+  /work/output/target//usr/bin/xargs already exists
+  /work/output/target//usr/bin/xxd already exists
+  /work/output/target//usr/bin/xz already exists
+  /work/output/target//usr/bin/xzcat already exists
+  /work/output/target//usr/bin/yes already exists
+  /work/output/target//usr/sbin/addgroup already exists
+  /work/output/target//usr/sbin/adduser already exists
+  /work/output/target//usr/sbin/arping already exists
+  /work/output/target//usr/sbin/chroot already exists
+  /work/output/target//usr/sbin/crond already exists
+  /work/output/target//usr/sbin/delgroup already exists
+  /work/output/target//usr/sbin/deluser already exists
+  /work/output/target//usr/sbin/dnsd already exists
+  /work/output/target//usr/sbin/ether-wake already exists
+  /work/output/target//usr/sbin/fbset already exists
+  /work/output/target//usr/sbin/fdformat already exists
+  /work/output/target//usr/sbin/fsfreeze already exists
+  /work/output/target//usr/sbin/i2cdetect already exists
+  /work/output/target//usr/sbin/i2cdump already exists
+  /work/output/target//usr/sbin/i2cget already exists
+  /work/output/target//usr/sbin/i2cset already exists
+  /work/output/target//usr/sbin/i2ctransfer already exists
+  /work/output/target//usr/sbin/inetd already exists
+  /work/output/target//usr/sbin/killall5 already exists
+  /work/output/target//usr/sbin/loadfont already exists
+  /work/output/target//usr/sbin/mim already exists
+  /work/output/target//usr/sbin/nologin already exists
+  /work/output/target//usr/sbin/partprobe already exists
+  /work/output/target//usr/sbin/rdate already exists
+  /work/output/target//usr/sbin/readprofile already exists
+  /work/output/target//usr/sbin/seedrng already exists
+  /work/output/target//usr/sbin/setlogcons already exists
+  /work/output/target//usr/sbin/ubirename already exists
+
+
+--------------------------------------------------
+You will probably need to make your busybox binary
+setuid root to ensure all configured applets will
+work properly.
+--------------------------------------------------
+
+if test ! -e /work/output/target/etc/inittab; then /usr/bin/install -D -m 0644 package/busybox/inittab /work/output/target/etc/inittab; fi
+if grep -q CONFIG_UDHCPC=y /work/output/build/busybox-1.37.0/.config; then /usr/bin/install -m 0755 -D package/busybox/udhcpc.script /work/output/target/usr/share/udhcpc/default.script; /usr/bin/install -m 0755 -d /work/output/target/usr/share/udhcpc/default.script.d; fi
+if grep -q CONFIG_ZCIP=y /work/output/build/busybox-1.37.0/.config; then /usr/bin/install -m 0755 -D /work/output/build/busybox-1.37.0/examples/zcip.script /work/output/target/usr/share/zcip/default.script; fi
+if grep -q CONFIG_SYSLOGD=y /work/output/build/busybox-1.37.0/.config; then /usr/bin/install -m 0755 -D package/busybox/S01syslogd /work/output/target/etc/init.d/S01syslogd; fi; if grep -q CONFIG_KLOGD=y /work/output/build/busybox-1.37.0/.config; then /usr/bin/install -m 0755 -D package/busybox/S02klogd /work/output/target/etc/init.d/S02klogd; fi
+if grep -q CONFIG_BB_SYSCTL=y /work/output/build/busybox-1.37.0/.config; then /usr/bin/install -m 0755 -D package/busybox/S02sysctl /work/output/target/etc/init.d/S02sysctl ; fi
+if grep -q CONFIG_IFPLUGD=y /work/output/build/busybox-1.37.0/.config; then /usr/bin/install -m 0755 -D package/busybox/S41ifplugd /work/output/target/etc/init.d/S41ifplugd; fi;
+if grep -q CONFIG_CROND=y /work/output/build/busybox-1.37.0/.config; then mkdir -p /work/output/target/etc/cron/crontabs ; /usr/bin/install -m 0755 -D package/busybox/S50crond /work/output/target/etc/init.d/S50crond; fi;
+if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y /work/output/build/busybox-1.37.0/.config; then /usr/bin/install -m 0755 -D package/busybox/S50telnet /work/output/target/etc/init.d/S50telnet ; fi
+comm: /work/output/build/busybox-1.37.0/.files-list.before: No such file or directory
+comm: /work/output/build/busybox-1.37.0/.files-list-staging.before: No such file or directory
+comm: /work/output/build/busybox-1.37.0/.files-list-images.before: No such file or directory
+comm: /work/output/build/busybox-1.37.0/.files-list-host.before: No such file or directory

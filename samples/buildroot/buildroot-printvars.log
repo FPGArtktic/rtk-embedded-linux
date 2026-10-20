@@ -1,0 +1,171 @@
+BUSYBOX_ACTUAL_SOURCE_SITE=https://www.busybox.net/downloads
+BUSYBOX_ACTUAL_SOURCE_TARBALL=busybox-1.37.0.tar.bz2
+BUSYBOX_ADDITIONAL_DOWNLOADS=
+BUSYBOX_ADD_CCACHE_DEPENDENCY=YES
+BUSYBOX_ADD_SKELETON_DEPENDENCY=YES
+BUSYBOX_ADD_TOOLCHAIN_DEPENDENCY=YES
+BUSYBOX_ALL_DOWNLOADS=https+https://www.busybox.net/downloads/busybox-1.37.0.tar.bz2 
+BUSYBOX_BASENAME=busybox-1.37.0
+BUSYBOX_BASENAME_RAW=busybox-1.37.0
+BUSYBOX_BUILDDIR=/work/output/build/busybox-1.37.0/
+BUSYBOX_BUILD_CMDS=	GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" /usr/bin/make -j17 AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y -C .
+BUSYBOX_CFLAGS=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1
+BUSYBOX_CONFIGURATOR_MAKE_ENV=GIT_DIR=. CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" PKG_CONFIG_PATH=""
+BUSYBOX_CONFIG_FILE=package/busybox/busybox.config
+BUSYBOX_CPE_ID=cpe:2.3:a:busybox:busybox:1.37.0:-:*:*:*:*:*:*
+BUSYBOX_CPE_ID_PREFIX=cpe:2.3:a
+BUSYBOX_CPE_ID_PRODUCT=busybox
+BUSYBOX_CPE_ID_UPDATE=-
+BUSYBOX_CPE_ID_VALID=YES
+BUSYBOX_CPE_ID_VENDOR=busybox
+BUSYBOX_CPE_ID_VERSION=1.37.0
+BUSYBOX_DEPENDENCIES=                       kmod                            skeleton toolchain host-skeleton
+BUSYBOX_DIR=/work/output/build/busybox-1.37.0
+BUSYBOX_DL_DIR=/work/dl/busybox
+BUSYBOX_DL_SUBDIR=busybox
+BUSYBOX_DL_VERSION=1.37.0
+BUSYBOX_DROP_FILES_OR_DIRS=/share/info/dir /usr/share/info/dir
+BUSYBOX_EXTRACT_CMDS=bzcat /work/dl/busybox/busybox-1.37.0.tar.bz2 | tar --strip-components=1 -C /work/output/build/busybox-1.37.0   -xf -
+BUSYBOX_EXTRACT_DEPENDENCIES=  
+BUSYBOX_FINAL_ALL_DEPENDENCIES=host-skeleton kmod skeleton toolchain
+BUSYBOX_FINAL_DEPENDENCIES=host-skeleton kmod skeleton toolchain
+BUSYBOX_FINAL_DOWNLOAD_DEPENDENCIES=
+BUSYBOX_FINAL_EXTRACT_DEPENDENCIES=
+BUSYBOX_FINAL_PATCH_DEPENDENCIES=
+BUSYBOX_FINAL_RECURSIVE_DEPENDENCIES=host-autoconf host-automake host-libtool host-m4 host-pkgconf host-skeleton kmod skeleton skeleton-init-common skeleton-init-sysv toolchain toolchain-external toolchain-external-bootlin xz
+BUSYBOX_FINAL_RECURSIVE_RDEPENDENCIES=
+BUSYBOX_FIXUP_DOT_CONFIG=		
+		@	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_NOMMU\>/d' / && echo '# CONFIG_NOMMU is not set' >> /
+	
+	
+			@if ! grep -q '^CONFIG_USE_BB_CRYPT_SHA=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_USE_BB_CRYPT_SHA\>/d' / && echo 'CONFIG_USE_BB_CRYPT_SHA=y' >> /; fi
+		@	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_PAM\>/d' / && echo '# CONFIG_PAM is not set' >> /
+		@	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_FEATURE_DEFAULT_PASSWD_ALGO\>/d' / && echo 'CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="sha256"' >> /
+			@if ! grep -q '^CONFIG_INIT=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_INIT\>/d' / && echo 'CONFIG_INIT=y' >> /; fi
+	
+	
+	
+	
+	
+	
+	
+		@[ -e /work/output/build/busybox-1.37.0/.br_regen_dot_config ] || GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" /usr/bin/make -j17 -C /work/output/build/busybox-1.37.0 HOSTCC="/usr/bin/gcc" AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y -pn config 2>/dev/null | sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d' >/work/output/build/busybox-1.37.0/.br_regen_dot_config
+	@if grep -q '\bolddefconfig\b' /work/output/build/busybox-1.37.0/.br_regen_dot_config; then GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" /usr/bin/make -j17 -C /work/output/build/busybox-1.37.0 HOSTCC="/usr/bin/gcc" AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y olddefconfig; elif grep -q '\boldnoconfig\b' /work/output/build/busybox-1.37.0/.br_regen_dot_config; then GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" /usr/bin/make -j17 -C /work/output/build/busybox-1.37.0 HOSTCC="/usr/bin/gcc" AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y oldnoconfig; else yes "" | GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" /usr/bin/make -j17 -C /work/output/build/busybox-1.37.0 HOSTCC="/usr/bin/gcc" AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y oldconfig; fi
+	@touch /work/output/build/busybox-1.37.0/.stamp_kconfig_fixup_done
+BUSYBOX_HASH_FILES=package/busybox/busybox.hash board/raspberrypi/patches/busybox/busybox.hash
+BUSYBOX_HELP_CMDS=	 @printf '  %-22s - Run %s %s\n' busybox-menuconfig busybox menuconfig
+	  @printf '  %-22s - Run %s %s\n' busybox-xconfig busybox xconfig
+	  @printf '  %-22s - Run %s %s\n' busybox-gconfig busybox gconfig
+	
+	 
+		@printf '  %-22s - Save the %s configuration as a full .config file\n' busybox-update-config busybox
+		@printf '  %-22s     to %s\n' '' package/busybox/busybox.config
+		@printf '  %-22s     (or override with %s_KCONFIG_FILE)\n' '' BUSYBOX
+	
+BUSYBOX_IGNORE_CVES=CVE-2022-28391 CVE-2025-46394 CVE-2025-60876
+BUSYBOX_INSTALL_ADD_TO_SHELLS=	if grep -q CONFIG_ASH=y /work/output/build/busybox-1.37.0/.config; then grep -qsE '^/bin/ash$' /work/output/target/etc/shells || echo "/bin/ash" >> /work/output/target/etc/shells; fi
+	if grep -q CONFIG_HUSH=y /work/output/build/busybox-1.37.0/.config; then grep -qsE '^/bin/hush$' /work/output/target/etc/shells || echo "/bin/hush" >> /work/output/target/etc/shells; fi
+BUSYBOX_INSTALL_CROND_SCRIPT=	if grep -q CONFIG_CROND=y ./.config; then mkdir -p /work/output/target/etc/cron/crontabs ; /usr/bin/install -m 0755 -D package/busybox/S50crond /work/output/target/etc/init.d/S50crond; fi;
+BUSYBOX_INSTALL_IFPLUGD_SCRIPT=	if grep -q CONFIG_IFPLUGD=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S41ifplugd /work/output/target/etc/init.d/S41ifplugd; fi;
+BUSYBOX_INSTALL_IMAGES=NO
+BUSYBOX_INSTALL_INITTAB=	if test ! -e /work/output/target/etc/inittab; then /usr/bin/install -D -m 0644 package/busybox/inittab /work/output/target/etc/inittab; fi
+BUSYBOX_INSTALL_INIT_OPENRC=	
+		if grep -q CONFIG_SYSLOGD=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S01syslogd /work/output/target/etc/init.d/S01syslogd; fi; if grep -q CONFIG_KLOGD=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S02klogd /work/output/target/etc/init.d/S02klogd; fi
+	
+		if grep -q CONFIG_IFPLUGD=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S41ifplugd /work/output/target/etc/init.d/S41ifplugd; fi;
+		if grep -q CONFIG_CROND=y ./.config; then mkdir -p /work/output/target/etc/cron/crontabs ; /usr/bin/install -m 0755 -D package/busybox/S50crond /work/output/target/etc/init.d/S50crond; fi;
+		if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S50telnet /work/output/target/etc/init.d/S50telnet ; fi
+	
+BUSYBOX_INSTALL_INIT_SYSTEMD=		if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y ./.config; then /usr/bin/install -D -m 0644 package/busybox/telnetd.service /work/output/target/usr/lib/systemd/system/telnetd.service ; fi
+BUSYBOX_INSTALL_INIT_SYSV=	
+		if grep -q CONFIG_SYSLOGD=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S01syslogd /work/output/target/etc/init.d/S01syslogd; fi; if grep -q CONFIG_KLOGD=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S02klogd /work/output/target/etc/init.d/S02klogd; fi
+	
+		if grep -q CONFIG_BB_SYSCTL=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S02sysctl /work/output/target/etc/init.d/S02sysctl ; fi
+		if grep -q CONFIG_IFPLUGD=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S41ifplugd /work/output/target/etc/init.d/S41ifplugd; fi;
+		if grep -q CONFIG_CROND=y ./.config; then mkdir -p /work/output/target/etc/cron/crontabs ; /usr/bin/install -m 0755 -D package/busybox/S50crond /work/output/target/etc/init.d/S50crond; fi;
+		if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S50telnet /work/output/target/etc/init.d/S50telnet ; fi
+	
+BUSYBOX_INSTALL_LOGGING_SCRIPT=	if grep -q CONFIG_SYSLOGD=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S01syslogd /work/output/target/etc/init.d/S01syslogd; fi; if grep -q CONFIG_KLOGD=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S02klogd /work/output/target/etc/init.d/S02klogd; fi
+BUSYBOX_INSTALL_STAGING=NO
+BUSYBOX_INSTALL_SYSCTL_SCRIPT=	if grep -q CONFIG_BB_SYSCTL=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S02sysctl /work/output/target/etc/init.d/S02sysctl ; fi
+BUSYBOX_INSTALL_TARGET=YES
+BUSYBOX_INSTALL_TARGET_CMDS=	# Use the 'noclobber' install rule, to prevent BusyBox from overwriting
+	# any full-blown versions of apps installed by other packages.
+	GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" /usr/bin/make -j17 AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y -C . install-noclobber
+	
+		if test ! -e /work/output/target/etc/inittab; then /usr/bin/install -D -m 0644 package/busybox/inittab /work/output/target/etc/inittab; fi
+		if grep -q CONFIG_UDHCPC=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/udhcpc.script /work/output/target/usr/share/udhcpc/default.script; /usr/bin/install -m 0755 -d /work/output/target/usr/share/udhcpc/default.script.d; fi
+		if grep -q CONFIG_ZCIP=y ./.config; then /usr/bin/install -m 0755 -D ./examples/zcip.script /work/output/target/usr/share/zcip/default.script; fi
+	
+BUSYBOX_INSTALL_TELNET_SCRIPT=	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/S50telnet /work/output/target/etc/init.d/S50telnet ; fi
+BUSYBOX_INSTALL_TELNET_SERVICE=	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y ./.config; then /usr/bin/install -D -m 0644 package/busybox/telnetd.service /work/output/target/usr/lib/systemd/system/telnetd.service ; fi
+BUSYBOX_INSTALL_UDHCPC_SCRIPT=	if grep -q CONFIG_UDHCPC=y ./.config; then /usr/bin/install -m 0755 -D package/busybox/udhcpc.script /work/output/target/usr/share/udhcpc/default.script; /usr/bin/install -m 0755 -d /work/output/target/usr/share/udhcpc/default.script.d; fi
+BUSYBOX_INSTALL_ZCIP_SCRIPT=	if grep -q CONFIG_ZCIP=y ./.config; then /usr/bin/install -m 0755 -D ./examples/zcip.script /work/output/target/usr/share/zcip/default.script; fi
+BUSYBOX_KCONFIG_DOTCONFIG=.config
+BUSYBOX_KCONFIG_EDITORS=menuconfig xconfig gconfig
+BUSYBOX_KCONFIG_FILE=package/busybox/busybox.config
+BUSYBOX_KCONFIG_FIXUP_CMDS=	
+		@	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_NOMMU\>/d' / && echo '# CONFIG_NOMMU is not set' >> /
+	
+	
+			@if ! grep -q '^CONFIG_USE_BB_CRYPT_SHA=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_USE_BB_CRYPT_SHA\>/d' / && echo 'CONFIG_USE_BB_CRYPT_SHA=y' >> /; fi
+		@	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_PAM\>/d' / && echo '# CONFIG_PAM is not set' >> /
+		@	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_FEATURE_DEFAULT_PASSWD_ALGO\>/d' / && echo 'CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="sha256"' >> /
+			@if ! grep -q '^CONFIG_INIT=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_INIT\>/d' / && echo 'CONFIG_INIT=y' >> /; fi
+	
+	
+	
+	
+	
+	
+	
+BUSYBOX_KCONFIG_FRAGMENT_FILES=
+BUSYBOX_KCONFIG_MAKE=GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox="" /usr/bin/make -j17 -C /work/output/build/busybox-1.37.0 HOSTCC="/usr/bin/gcc" AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y
+BUSYBOX_KCONFIG_OPTS=AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y
+BUSYBOX_KCONFIG_STAMP_DOTCONFIG=.stamp_dotconfig
+BUSYBOX_KCONFIG_SUPPORTS_DEFCONFIG=NO
+BUSYBOX_KCONFIG_VAR=BR2_PACKAGE_BUSYBOX
+BUSYBOX_LDFLAGS=
+BUSYBOX_LICENSE=GPL-2.0, bzip2-1.0.4
+BUSYBOX_LICENSE_FILES=LICENSE archival/libarchive/bz/LICENSE
+BUSYBOX_LINUX_PAM=	@	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_PAM\>/d' / && echo '# CONFIG_PAM is not set' >> /
+BUSYBOX_MAIN_DOWNLOAD=https+https://www.busybox.net/downloads/busybox-1.37.0.tar.bz2
+BUSYBOX_MAKE=/usr/bin/make -j17
+BUSYBOX_MAKE_ENV=GIT_DIR=. PATH="/work/output/host/bin:/work/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1" CFLAGS_busybox=""
+BUSYBOX_MAKE_OPTS=AR="/work/output/host/bin/aarch64-linux-gcc-ar" NM="/work/output/host/bin/aarch64-linux-gcc-nm" RANLIB="/work/output/host/bin/aarch64-linux-gcc-ranlib" CC="/work/output/host/bin/aarch64-linux-gcc" ARCH=arm64 PREFIX="/work/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/work/output/host/bin/aarch64-linux-" CONFIG_PREFIX="/work/output/target" SKIP_STRIP=y
+BUSYBOX_MANIFEST_LICENSE_FILES=LICENSE archival/libarchive/bz/LICENSE
+BUSYBOX_NAME=busybox
+BUSYBOX_PERMISSIONS=	/bin/busybox                     f 4755 0  0 - - - - -
+BUSYBOX_PKGDIR=package/busybox
+BUSYBOX_POST_INSTALL_STAGING_HOOKS=REMOVE_CONFLICTING_USELESS_FILES_IN_STAGING
+BUSYBOX_POST_INSTALL_TARGET_HOOKS=REMOVE_CONFLICTING_USELESS_FILES_IN_TARGET
+BUSYBOX_POST_PREPARE_HOOKS=PPD_FIXUP_PATHS PPD_PYTHON_REMOVE_SYSCONFIGDATA_PYC
+BUSYBOX_RAWNAME=busybox
+BUSYBOX_REDISTRIBUTE=YES
+BUSYBOX_REDIST_SOURCES_DIR=/work/output/legal-info/sources/busybox-1.37.0
+BUSYBOX_SET_CRYPT_SHA=		@if ! grep -q '^CONFIG_USE_BB_CRYPT_SHA=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_USE_BB_CRYPT_SHA\>/d' / && echo 'CONFIG_USE_BB_CRYPT_SHA=y' >> /; fi
+BUSYBOX_SET_DEFAULT_PASSWD_ALGO=	@	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_FEATURE_DEFAULT_PASSWD_ALGO\>/d' / && echo 'CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="sha256"' >> /
+BUSYBOX_SET_GETTY=	/usr/bin/sed -i -e '/# GENERIC_SERIAL$/s~^.*#~console::respawn:/sbin/getty -L  console 0 vt100 #~' /work/output/target/etc/inittab
+BUSYBOX_SET_INIT=		@if ! grep -q '^CONFIG_INIT=[my]' /; then 	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_INIT\>/d' / && echo 'CONFIG_INIT=y' >> /; fi
+BUSYBOX_SET_MMU=	@	/usr/bin/sed -i -e '/^\(# \)\?CONFIG_NOMMU\>/d' / && echo '# CONFIG_NOMMU is not set' >> /
+BUSYBOX_SITE=https://www.busybox.net/downloads
+BUSYBOX_SITE_METHOD=https
+BUSYBOX_SOURCE=busybox-1.37.0.tar.bz2
+BUSYBOX_SRCDIR=/work/output/build/busybox-1.37.0/
+BUSYBOX_STRIP_COMPONENTS=1
+BUSYBOX_TARGET_ACTUAL_SOURCE=/work/output/build/busybox-1.37.0/.stamp_actual_downloaded
+BUSYBOX_TARGET_BUILD=/work/output/build/busybox-1.37.0/.stamp_built
+BUSYBOX_TARGET_CONFIGURE=/work/output/build/busybox-1.37.0/.stamp_configured
+BUSYBOX_TARGET_DIRCLEAN=/work/output/build/busybox-1.37.0/.stamp_dircleaned
+BUSYBOX_TARGET_EXTRACT=/work/output/build/busybox-1.37.0/.stamp_extracted
+BUSYBOX_TARGET_FINALIZE_HOOKS=BUSYBOX_SET_GETTY SYSTEM_REMOUNT_ROOT_INITTAB BUSYBOX_INSTALL_ADD_TO_SHELLS
+BUSYBOX_TARGET_INSTALL=/work/output/build/busybox-1.37.0/.stamp_installed
+BUSYBOX_TARGET_INSTALL_HOST=/work/output/build/busybox-1.37.0/.stamp_host_installed
+BUSYBOX_TARGET_INSTALL_IMAGES=/work/output/build/busybox-1.37.0/.stamp_images_installed
+BUSYBOX_TARGET_INSTALL_STAGING=/work/output/build/busybox-1.37.0/.stamp_staging_installed
+BUSYBOX_TARGET_INSTALL_TARGET=/work/output/build/busybox-1.37.0/.stamp_target_installed
+BUSYBOX_TARGET_PATCH=/work/output/build/busybox-1.37.0/.stamp_patched
+BUSYBOX_TARGET_RSYNC=/work/output/build/busybox-1.37.0/.stamp_rsynced
+BUSYBOX_TARGET_SOURCE=/work/output/build/busybox-1.37.0/.stamp_downloaded
+BUSYBOX_TYPE=target
+BUSYBOX_VERSION=1.37.0

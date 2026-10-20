@@ -1,0 +1,12 @@
+>>> rtk-fail-compile 1.0 Syncing from source dir /ref/buildroot/external/package/rtk-fail-compile/src
+rsync -au --chmod=u=rwX,go=rX  --exclude .svn --exclude .git --exclude .hg --exclude .bzr --exclude CVS /ref/buildroot/external/package/rtk-fail-compile/src/ /work/output/build/rtk-fail-compile-1.0
+>>> rtk-fail-compile 1.0 Configuring
+>>> rtk-fail-compile 1.0 Building
+/work/output/host/bin/aarch64-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1  -o /work/output/build/rtk-fail-compile-1.0/rtk-fail-compile /work/output/build/rtk-fail-compile-1.0/rtk-fail-compile.c
+/work/output/build/rtk-fail-compile-1.0/rtk-fail-compile.c: In function ‘main’:
+/work/output/build/rtk-fail-compile-1.0/rtk-fail-compile.c:7:9: error: ‘count’ undeclared (first use in this function)
+    7 |         count += i;
+      |         ^~~~~
+/work/output/build/rtk-fail-compile-1.0/rtk-fail-compile.c:7:9: note: each undeclared identifier is reported only once for each function it appears in
+make[1]: *** [package/pkg-generic.mk:273: /work/output/build/rtk-fail-compile-1.0/.stamp_built] Error 1
+make: *** [Makefile:23: _all] Error 2
