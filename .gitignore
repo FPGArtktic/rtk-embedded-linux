@@ -1,0 +1,14 @@
+# Agent instructions — never committed
+CLAUDE.md
+.claude/
+
+# Build trees and caches (CLAUDE.md §12) — ctr.sh mounts this checkout at /work
+build/
+tmp/
+sstate-cache/
+downloads/
+dl/
+output/
+
+# Apptainer images
+*.sif
