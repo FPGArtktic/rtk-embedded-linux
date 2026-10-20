@@ -1,0 +1,663 @@
+# rtk filters for Yocto (BitBake) and Buildroot.  https://github.com/FPGArtktic/rtk-embedded-linux
+#
+# One file for every runtime. Each match_command is the prefix P followed by a tool-specific tail.
+# P lets the tool appear at the start of a command segment, after a shell separator or opening
+# quote, after `podman|apptainer|singularity run|exec ...`, or after any `*.sh` wrapper (which is
+# the way around Docker, see README). Filters never depend on a wrapper name, path or runtime.
+#
+# Regex notes (Rust `regex`, no lookahead):
+#   - (?x) verbose mode: whitespace and #-comments are ignored, so a literal space is written \s
+#     and never placed inside a [...] class.
+#   - rtk silently drops a filter whose match_command does not start with ^ ; hence ^.*? before P.
+#   - rtk sorts filters by name, so definition order cannot resolve overlaps. Filters are mutually
+#     exclusive by construction instead (scripts/check-routing.py proves it for every known form).
+#   - The hook tests one command segment with quotes kept; execution tests basename(argv0) + argv
+#     joined by spaces with quotes gone. Both forms must route to the same filter.
+schema_version = 1
+
+
+# ---------------------------------------------------------------------------------------------
+# Yocto / BitBake
+# ---------------------------------------------------------------------------------------------
+
+[filters.bitbake-build]
+description = "bitbake <target>: keeps ERROR/WARNING, failed-task logs (| lines) and both summaries; drops per-task NOTE progress, parse/cache chatter and the Build Configuration block (measured: -99.94% clean build, -99.97% sstate rebuild, -71% compile failure, -33% fetch failure)"
+# Arguments may only be build flags, -c <task> and targets (recipes, virtual/x, mc:..., x:do_task);
+# -e, -s, -g and -c listtasks are claimed by their own filters, --version and friends by none.
+# The -c task word is any word except listtasks/do_listtasks, generated with:
+#   scripts/complement-regex.py --class 'A-Za-z0-9_' listtasks do_listtasks
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  bitbake
+  (?: \s+ (?: -[kfnqvD]+ | --(?:continue|force|dry-run|quiet|verbose|setscene-only|skip-setscene|no-setscene)
+            | (?: -c\s* | --(?:cmd|runall|runonly)(?:=|\s+) )
+              (?:[A-Za-z0-9_--[dl]][A-Za-z0-9_]*|d(?:[A-Za-z0-9_--[o]][A-Za-z0-9_]*|o(?:[A-Za-z0-9_--[_]][A-Za-z0-9_]*|_(?:[A-Za-z0-9_--[l]][A-Za-z0-9_]*|l(?:[A-Za-z0-9_--[i]][A-Za-z0-9_]*|i(?:[A-Za-z0-9_--[s]][A-Za-z0-9_]*|s(?:[A-Za-z0-9_--[t]][A-Za-z0-9_]*|t(?:[A-Za-z0-9_--[t]][A-Za-z0-9_]*|t(?:[A-Za-z0-9_--[a]][A-Za-z0-9_]*|a(?:[A-Za-z0-9_--[s]][A-Za-z0-9_]*|s(?:[A-Za-z0-9_--[k]][A-Za-z0-9_]*|k(?:[A-Za-z0-9_--[s]][A-Za-z0-9_]*|s(?:[A-Za-z0-9_]+)|)|)|)|)|)|)|)|)|)|)|)|l(?:[A-Za-z0-9_--[i]][A-Za-z0-9_]*|i(?:[A-Za-z0-9_--[s]][A-Za-z0-9_]*|s(?:[A-Za-z0-9_--[t]][A-Za-z0-9_]*|t(?:[A-Za-z0-9_--[t]][A-Za-z0-9_]*|t(?:[A-Za-z0-9_--[a]][A-Za-z0-9_]*|a(?:[A-Za-z0-9_--[s]][A-Za-z0-9_]*|s(?:[A-Za-z0-9_--[k]][A-Za-z0-9_]*|k(?:[A-Za-z0-9_--[s]][A-Za-z0-9_]*|s(?:[A-Za-z0-9_]+)|)|)|)|)|)|)|)|))
+            | [A-Za-z0-9][A-Za-z0-9_.+:/-]*
+  ) )+
+  \s* (?: [;&|'"] | $ )
+'''
+strip_ansi = true
+# Non-interactive knotty writes progress and summaries to stdout, and only the first line of each
+# WARNING/ERROR to stderr ("Log data follows:" and the "| " task-log lines go to stdout). stderr is
+# therefore left unfiltered: it carries nothing but WARNING/ERROR, and it reaches the agent first,
+# so each ERROR still comes before its log. With filter_stderr = true rtk would append it last.
+filter_stderr = false
+# Known noise only: any line not listed here, including every NOTE not listed, survives.
+strip_lines_matching = [
+  '^NOTE: Running (?:setscene |noexec )?task \d+ of \d+ \(',
+  '^NOTE: recipe \S+: task \S+: (?:Started|Succeeded)$',
+  '^NOTE: (?:Executing (?:SetScene )?Tasks|Resolving any missing task queue dependencies|Setscene tasks completed)$',
+  '^NOTE: Fetching uninative binary shim ',
+  '^(?:Loading cache\.\.\.|Loaded \d+ entries from dependency cache\.|Parsing recipes\.\.\.|Parsing of \d+ \.bb files complete|Initialising tasks\.\.\.|Checking sstate mirror object availability\.\.\.|Sstate summary: )',
+  '^done\.$',
+  # the Build Configuration block: header, VAR = "value" lines, layer lines
+  '^Build Configuration:$',
+  '^[A-Z][A-Z0-9_]*\s+= ".*"$',
+  '^(?:meta[\w-]*|workspace)\s*(?:= "[^"]*")?$',
+  '^\s*$',
+]
+on_empty = "bitbake: nothing to report"
+
+[filters.bitbake-e]
+description = "bitbake -e: drops variable history comments and blank lines, shows the first 100 lines; rtk saves the rest (comment-free) and prints `tail -n +101 <file>` to read it (measured: -99.77%)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  bitbake (?: \s+ (?:[^\s;&|'"]|'[^']*'|"[^"]*")+ )*? \s+ (?: -e | --environment ) (?: [\s;&|'"] | $ )
+'''
+strip_ansi = true
+# 53% of the output is history comments ("# $VAR [N operations]" ...). What remains is ~1 MB of
+# VAR="value" lines and function bodies, still far too much to read, so only the first lines are
+# shown. max_lines (not truncate_lines_at) keeps rtk's tee file the filtered text rather than the
+# raw 2 MB, so the whole comment-free environment fits rtk's default 1 MiB tee cap and can be
+# grepped there. `bitbake -e X | grep ...` is a pipeline and is never rewritten by rtk.
+strip_lines_matching = [
+  '^#',
+  '^(?:Loading cache\.\.\.|Loaded \d+ entries from dependency cache\.|Parsing recipes\.\.\.|Parsing of \d+ \.bb files complete)',
+  '^NOTE: (?:Starting bitbake server\.\.\.|Resolving any missing task queue dependencies)$',
+  '^\s*$',
+]
+max_lines = 100
+
+[filters.bitbake-s]
+description = "bitbake -s: drops cache chatter, trims trailing padding and the gap after the recipe name; later columns keep their alignment (measured: -75.7%)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  bitbake (?: \s+ (?:[^\s;&|'"]|'[^']*'|"[^"]*")+ )*? \s+ (?: -s | --show-versions ) (?: [\s;&|'"] | $ )
+'''
+strip_ansi = true
+strip_lines_matching = [
+  '^(?:Loading cache\.\.\.|Loaded \d+ entries from dependency cache\.|Parsing recipes\.\.\.|Parsing of \d+ \.bb files complete)',
+  '^NOTE: (?:Starting bitbake server\.\.\.|Resolving any missing task queue dependencies)$',
+  '^\s*$',
+]
+# Rows are padded to fixed-width columns. The first two (recipe, latest version) are always set, so
+# their gap can shrink; Preferred/Required may be empty, so their alignment is left alone.
+replace = [
+  { pattern = '\s+$', replacement = '' },
+  { pattern = '^(\S+)\s{2,}(\S)', replacement = '${1} ${2}' },
+]
+
+[filters.bitbake-listtasks]
+description = "bitbake -c listtasks: keeps the do_* task table and summaries; drops the build chatter around it (measured: -19.3%)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  bitbake (?: \s+ (?:[^\s;&|'"]|'[^']*'|"[^"]*")+ )*? \s+ (?: -c\s* | --cmd(?:=|\s+) ) (?:do_)?listtasks (?: [\s;&|'"] | $ )
+'''
+strip_ansi = true
+strip_lines_matching = [
+  '^NOTE: Running (?:setscene |noexec )?task \d+ of \d+ \(',
+  '^NOTE: recipe \S+: task \S+: (?:Started|Succeeded)$',
+  '^NOTE: (?:Executing (?:SetScene )?Tasks|No setscene tasks|Setscene tasks completed)$',
+  '^(?:Loading cache\.\.\.|Loaded \d+ entries from dependency cache\.|Parsing recipes\.\.\.|Parsing of \d+ \.bb files complete)',
+  '^NOTE: (?:Starting bitbake server\.\.\.|Resolving any missing task queue dependencies)$',
+  '^(?:Initialising tasks\.\.\.|Checking sstate mirror object availability\.\.\.|Sstate summary: )',
+  '^done\.$',
+  '^Build Configuration:$',
+  '^[A-Z][A-Z0-9_]*\s+= ".*"$',
+  '^(?:meta[\w-]*|workspace)\s*(?:= "[^"]*")?$',
+  '^\s*$',
+]
+
+[filters.bitbake-g]
+description = "bitbake -g: keeps the lines naming the written .dot/buildlist files; drops cache chatter (measured: -54.9%)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  bitbake (?: \s+ (?:[^\s;&|'"]|'[^']*'|"[^"]*")+ )*? \s+ (?: -g | --graphviz ) (?: [\s;&|'"] | $ )
+'''
+strip_ansi = true
+strip_lines_matching = [
+  '^(?:Loading cache\.\.\.|Loaded \d+ entries from dependency cache\.|Parsing recipes\.\.\.|Parsing of \d+ \.bb files complete)',
+  '^NOTE: (?:Starting bitbake server\.\.\.|Resolving any missing task queue dependencies)$',
+  '^\s*$',
+]
+
+[filters.bitbake-layers]
+description = "bitbake-layers show-layers|show-recipes|show-appends: drops server/cache chatter and collapses column padding (measured: -55% show-layers, -32% show-recipes, -2% show-appends)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  bitbake-layers (?: \s+ (?:[^\s;&|'"]|'[^']*'|"[^"]*")+ )*? \s+ show-(?:layers|recipes|appends|overlayed|cross-depends) (?: [\s;&|'"] | $ )
+'''
+strip_ansi = true
+strip_lines_matching = [
+  '^(?:Loading cache\.\.\.|Loaded \d+ entries from dependency cache\.|Parsing recipes\.\.\.|Parsing of \d+ \.bb files complete)',
+  '^NOTE: (?:Starting bitbake server\.\.\.|Resolving any missing task queue dependencies)$',
+  '^\s*$',
+]
+# Every column of these tables is always filled, so a run of spaces between two fields carries no
+# information. Indentation (which marks the per-layer lines of show-recipes) is kept.
+replace = [
+  { pattern = '(\S) {2,}', replacement = '${1} ' },
+  { pattern = '\s+$', replacement = '' },
+]
+
+[filters.bitbake-getvar]
+description = "bitbake-getvar: keeps the value and every operation (file:line + its value); drops the [doc] text, varflag operations and the unexpanded duplicate of the value (measured: -36.3%)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  bitbake-getvar (?: [\s;&|'"] | $ )
+'''
+strip_ansi = true
+strip_lines_matching = [
+  '^#$',
+  '^#     \[[A-Za-z0-9_.-]+\] ',
+  '^# pre-expansion value:$',
+  '^#   "',
+  '^(?:Loading cache\.\.\.|Loaded \d+ entries from dependency cache\.|Parsing recipes\.\.\.|Parsing of \d+ \.bb files complete)',
+  '^NOTE: (?:Starting bitbake server\.\.\.|Resolving any missing task queue dependencies)$',
+]
+
+
+# ---------------------------------------------------------------------------------------------
+# Buildroot
+# ---------------------------------------------------------------------------------------------
+# Every `make` this project runs must land in one of the buildroot-* filters: a make command no
+# project filter claims falls through to rtk's built-in `make` filter, which drops `make[N]: ***`
+# error lines and keeps only the first 50 lines.
+
+[filters.buildroot-make]
+description = "Buildroot make / make <defconfig> / make <pkg>[-rebuild]: a clean build becomes one line; a failure keeps errors, *** lines and >>> steps (last 200 lines) (measured: -99.99% full build, -99.5% rebuild, -93.6% defconfig, -99.8% long failure, -32% short failure)"
+# Arguments are options, VAR=value assignments, or targets. A target is hyphen-separated segments,
+# none of which is show, graph, legal, list, printvars, help or deps: those belong to the other
+# buildroot-* filters. The segment regex is generated with:
+#   scripts/complement-regex.py show graph legal list printvars help deps
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  make
+  (?: \s+ (?: -[CfIoW]\s*[^\s;&|'"]+
+            | -[^\s;&|'"]*
+            | [A-Za-z_][A-Za-z0-9_]*\+?=(?:[^\s;&|'"]|'[^']*'|"[^"]*")*
+            | (?:[A-Za-z0-9_.+--[dghlps]][A-Za-z0-9_.+]*|d(?:[A-Za-z0-9_.+--[e]][A-Za-z0-9_.+]*|e(?:[A-Za-z0-9_.+--[p]][A-Za-z0-9_.+]*|p(?:[A-Za-z0-9_.+--[s]][A-Za-z0-9_.+]*|s(?:[A-Za-z0-9_.+]+)|)|)|)|g(?:[A-Za-z0-9_.+--[r]][A-Za-z0-9_.+]*|r(?:[A-Za-z0-9_.+--[a]][A-Za-z0-9_.+]*|a(?:[A-Za-z0-9_.+--[p]][A-Za-z0-9_.+]*|p(?:[A-Za-z0-9_.+--[h]][A-Za-z0-9_.+]*|h(?:[A-Za-z0-9_.+]+)|)|)|)|)|h(?:[A-Za-z0-9_.+--[e]][A-Za-z0-9_.+]*|e(?:[A-Za-z0-9_.+--[l]][A-Za-z0-9_.+]*|l(?:[A-Za-z0-9_.+--[p]][A-Za-z0-9_.+]*|p(?:[A-Za-z0-9_.+]+)|)|)|)|l(?:[A-Za-z0-9_.+--[ei]][A-Za-z0-9_.+]*|e(?:[A-Za-z0-9_.+--[g]][A-Za-z0-9_.+]*|g(?:[A-Za-z0-9_.+--[a]][A-Za-z0-9_.+]*|a(?:[A-Za-z0-9_.+--[l]][A-Za-z0-9_.+]*|l(?:[A-Za-z0-9_.+]+)|)|)|)|i(?:[A-Za-z0-9_.+--[s]][A-Za-z0-9_.+]*|s(?:[A-Za-z0-9_.+--[t]][A-Za-z0-9_.+]*|t(?:[A-Za-z0-9_.+]+)|)|)|)|p(?:[A-Za-z0-9_.+--[r]][A-Za-z0-9_.+]*|r(?:[A-Za-z0-9_.+--[i]][A-Za-z0-9_.+]*|i(?:[A-Za-z0-9_.+--[n]][A-Za-z0-9_.+]*|n(?:[A-Za-z0-9_.+--[t]][A-Za-z0-9_.+]*|t(?:[A-Za-z0-9_.+--[v]][A-Za-z0-9_.+]*|v(?:[A-Za-z0-9_.+--[a]][A-Za-z0-9_.+]*|a(?:[A-Za-z0-9_.+--[r]][A-Za-z0-9_.+]*|r(?:[A-Za-z0-9_.+--[s]][A-Za-z0-9_.+]*|s(?:[A-Za-z0-9_.+]+)|)|)|)|)|)|)|)|)|s(?:[A-Za-z0-9_.+--[h]][A-Za-z0-9_.+]*|h(?:[A-Za-z0-9_.+--[o]][A-Za-z0-9_.+]*|o(?:[A-Za-z0-9_.+--[w]][A-Za-z0-9_.+]*|w(?:[A-Za-z0-9_.+]+)|)|)|))
+              (?: - (?:[A-Za-z0-9_.+--[dghlps]][A-Za-z0-9_.+]*|d(?:[A-Za-z0-9_.+--[e]][A-Za-z0-9_.+]*|e(?:[A-Za-z0-9_.+--[p]][A-Za-z0-9_.+]*|p(?:[A-Za-z0-9_.+--[s]][A-Za-z0-9_.+]*|s(?:[A-Za-z0-9_.+]+)|)|)|)|g(?:[A-Za-z0-9_.+--[r]][A-Za-z0-9_.+]*|r(?:[A-Za-z0-9_.+--[a]][A-Za-z0-9_.+]*|a(?:[A-Za-z0-9_.+--[p]][A-Za-z0-9_.+]*|p(?:[A-Za-z0-9_.+--[h]][A-Za-z0-9_.+]*|h(?:[A-Za-z0-9_.+]+)|)|)|)|)|h(?:[A-Za-z0-9_.+--[e]][A-Za-z0-9_.+]*|e(?:[A-Za-z0-9_.+--[l]][A-Za-z0-9_.+]*|l(?:[A-Za-z0-9_.+--[p]][A-Za-z0-9_.+]*|p(?:[A-Za-z0-9_.+]+)|)|)|)|l(?:[A-Za-z0-9_.+--[ei]][A-Za-z0-9_.+]*|e(?:[A-Za-z0-9_.+--[g]][A-Za-z0-9_.+]*|g(?:[A-Za-z0-9_.+--[a]][A-Za-z0-9_.+]*|a(?:[A-Za-z0-9_.+--[l]][A-Za-z0-9_.+]*|l(?:[A-Za-z0-9_.+]+)|)|)|)|i(?:[A-Za-z0-9_.+--[s]][A-Za-z0-9_.+]*|s(?:[A-Za-z0-9_.+--[t]][A-Za-z0-9_.+]*|t(?:[A-Za-z0-9_.+]+)|)|)|)|p(?:[A-Za-z0-9_.+--[r]][A-Za-z0-9_.+]*|r(?:[A-Za-z0-9_.+--[i]][A-Za-z0-9_.+]*|i(?:[A-Za-z0-9_.+--[n]][A-Za-z0-9_.+]*|n(?:[A-Za-z0-9_.+--[t]][A-Za-z0-9_.+]*|t(?:[A-Za-z0-9_.+--[v]][A-Za-z0-9_.+]*|v(?:[A-Za-z0-9_.+--[a]][A-Za-z0-9_.+]*|a(?:[A-Za-z0-9_.+--[r]][A-Za-z0-9_.+]*|r(?:[A-Za-z0-9_.+--[s]][A-Za-z0-9_.+]*|s(?:[A-Za-z0-9_.+]+)|)|)|)|)|)|)|)|)|s(?:[A-Za-z0-9_.+--[h]][A-Za-z0-9_.+]*|h(?:[A-Za-z0-9_.+--[o]][A-Za-z0-9_.+]*|o(?:[A-Za-z0-9_.+--[w]][A-Za-z0-9_.+]*|w(?:[A-Za-z0-9_.+]+)|)|)|)) )*
+  ) )*
+  \s* (?: [;&|'"] | $ )
+'''
+strip_ansi = true
+# make writes compiler errors and `make: ***` to stderr, and so do wget's progress and most
+# warnings: without this they would bypass the filter. rtk appends stderr after stdout.
+filter_stderr = true
+# Everything below runs only when the short-circuit did not fire: a failure, a Buildroot WARNING,
+# or output that is not a build (make --version, ...). Unknown lines always survive.
+strip_lines_matching = [
+  '^\s*$',
+  # downloads: wget progress and chatter
+  '^\s*\d+K[ .]+',
+  '^--\d{4}-\d\d-\d\d \d\d:\d\d:\d\d--  ',
+  '^(?:Resolving |Connecting to |HTTP request sent|Length: |Saving to: |Location: |Reusing existing connection)',
+  '^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d \(.*\) - .* saved',
+  # autotools / libtool
+  '^checking ',
+  '^config\.status: ',
+  '^configure: (?:creating|loading|updating|executing|WARNING: unrecognized options:)',
+  '^libtoolize: ',
+  '^libtool: (?:compile|link|install|finish|warning: remember to run)',
+  '^(?:Making|making) \w+ in ',
+  # make chatter
+  '^make(?:\[\d+\])?: (?:Entering|Leaving) directory',
+  '^make(?:\[\d+\])?: Nothing to be done',
+  '^make(?:\[\d+\])?: .* is up to date\.$',
+  # silent-rule progress, one word + one path: "  CC      x.o", "  CC [M]  x.o", "  XZ  x.ko.xz"
+  '^\s+[A-Z][A-Z0-9_-]{1,15}(?:\s+\[[A-Z]\])?\s+\S+\s*$',
+  # echoed recipe commands: compiler/linker with options, shell builtins and file tools
+  '^\s*(?:\S*/)?(?:[\w.+-]+-)?(?:gcc|g\+\+|cc|c\+\+|clang|ld|ar|ranlib|strip|objcopy|nm|as|cpp)\s+-',
+  '^\s*(?:\S*/)?(?:bash|sh) \S*libtool ',
+  '^\s*(?:\S*/)?(?:install|mkdir|rm|cp|ln|chmod|mv|rsync|sed|tar|touch|cd|test|echo|printf|true|find|xargs|perl|python3?|cat)\s',
+  '^\s*(?:\S*/)?make\s+-',
+  '^\s*(?:for|if|then|else|elif|fi|done|while|do|case|esac)\b',
+  '^\(cd ',
+  '^(?:GIT_DIR|PATH|PKG_CONFIG_PATH|PKG_CONFIG|CC|CXX|CFLAGS|LDFLAGS|PERL)=',
+  # patches
+  '^Applying \S+ using patch:',
+  '^(?:patching|checking) file ',
+  '^Hunk #\d+ succeeded at ',
+  # kconfig prompts and banners (busybox/linux oldconfig)
+  '\([A-Z0-9_]+\) \[[A-Za-z0-9/?]+\]',
+  '^\*$',
+  '^\* ',
+  '^#$',
+  # comments echoed from make recipes ("# Install modules and remove symbolic links ...")
+  '^# ',
+  # libtool "Libraries have been installed" banner
+  '^-{20,}$',
+  '^Libraries have been installed in:$',
+  '^\s+/\S+$',
+  '^If you ever happen to want to link against installed libraries',
+  '^in a given directory, LIBDIR, you must either use libtool',
+  '^specify the full pathname of the library, or use the',
+  '^flag during linking and do at least one of the following:',
+  '^\s+- (?:add LIBDIR to the|use the .-Wl,|have your system administrator)',
+  '^See any operating system documentation about shared libraries for',
+  '^more information, such as the ld\(1\) and ld\.so\(8\) manual pages\.',
+  # image generation and configure chatter
+  '^INFO: ',
+  '^DEBUG: ',
+]
+# A failing make stops at the error, so errors and `make: ***` are at the end. rtk tees the raw
+# output and prints the path when lines are cut.
+tail_lines = 200
+on_empty = "buildroot: OK"
+
+# A build (">>>" steps or a written .config) with no failure marker is reported as one line.
+# `make[N]: [...] Error 1 (ignored)` has no `***` and does not count as a failure.
+[[filters.buildroot-make.match_output]]
+pattern = '(?m)^>>> |^# configuration written to '
+unless = '(?m)^make(?:\[\d+\])?: \*\*\*|^WARNING:|^ERROR:|: (?:fatal )?error: |undefined reference to |No rule to make target'
+message = "buildroot: OK"
+
+[filters.buildroot-printvars]
+description = "make printvars / show-vars / [<pkg>-]show-info|show-version: passthrough (values must stay verbatim); exists so rtk's built-in make filter cannot cut them (measured: 0%, by design)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  make (?: \s+ (?:[^\s;&|'"]|'[^']*'|"[^"]*")+ )*? \s+ (?: printvars | show-vars | (?:[^\s;&|'"]+-)?show-(?:info|version) ) (?: [\s;&|'"] | $ )
+'''
+
+[filters.buildroot-show-targets]
+description = "make show-targets / list-defconfigs / help / external-deps: listings, kept whole; drops only the redundant '- Build for <name>' of each defconfig (measured: -56.7% list-defconfigs, 0% show-targets)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  make (?: \s+ (?:[^\s;&|'"]|'[^']*'|"[^"]*")+ )*? \s+ (?: show-targets | list-defconfigs | help | external-deps ) (?: [\s;&|'"] | $ )
+'''
+# Every built-in defconfig is described as "Build for <its own name>", which adds nothing.
+replace = [
+  { pattern = '^(\s*)(\S+)_defconfig\s+- Build for (\S+)\s*$', replacement = '${1}${2}_defconfig' },
+]
+
+[filters.buildroot-depends]
+description = "make <pkg>-show-[recursive-]depends / graph-depends: passthrough (small lists); exists so rtk's built-in make filter cannot cut them (measured: 0%, by design)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  make (?: \s+ (?:[^\s;&|'"]|'[^']*'|"[^"]*")+ )*? \s+
+  (?: (?:[^\s;&|'"]+-)? (?: show-(?:recursive-)?r?depends | graph-r?depends ) | graph-build | graph-size )
+  (?: [\s;&|'"] | $ )
+'''
+
+[filters.buildroot-legal-info]
+description = "make legal-info: keeps WARNING/ERROR lines, the >>> step they belong to and the summary; drops per-file 'OK (sha256: ...)' checks (measured: -70.6%)"
+match_command = '''(?x)^.*?
+  (?: ^ | [;&|'"]\s* | (?:podman|apptainer|singularity)\s+(?:run|exec)\b[^;&|]*[\s'"] | \S+\.sh\b[^;&|]*[\s'"] )
+  make (?: \s+ (?:[^\s;&|'"]|'[^']*'|"[^"]*")+ )*? \s+ (?:[^\s;&|'"]+-)? legal-info (?: [\s;&|'"] | $ )
+'''
+strip_ansi = true
+filter_stderr = true
+strip_lines_matching = [
+  '^\S+: OK \(sha256: [0-9a-f]{64}\)$',
+  '^\s*$',
+]
+
+
+# ---------------------------------------------------------------------------------------------
+# Inline tests (rtk verify). Inputs are excerpts of samples/{yocto,buildroot}/*.log; the few
+# synthetic lines are marked as such in the test name.
+# ---------------------------------------------------------------------------------------------
+
+[[tests.bitbake-build]]
+name = "a clean build keeps warnings and both summaries"
+input = '''
+Loading cache...done.
+Loaded 0 entries from dependency cache.
+Parsing recipes...done.
+Parsing of 963 .bb files complete (0 cached, 963 parsed). 1925 targets, 76 skipped, 0 masked, 0 errors.
+NOTE: Resolving any missing task queue dependencies
+
+Build Configuration:
+BB_VERSION           = "2.8.1"
+MACHINE              = "raspberrypi4-64"
+meta                 
+meta-raspberrypi     
+meta-rpi-ref         = "<unknown>:<unknown>"
+
+NOTE: Fetching uninative binary shim http://downloads.yoctoproject.org/releases/uninative/5.1/x86_64-nativesdk-libc-5.1.tar.xz;sha256sum=2b63
+Initialising tasks...Sstate summary: Wanted 1754 Local 0 Mirrors 0 Missed 1754 Current 0 (0% match, 0% complete)
+done.
+NOTE: Executing Tasks
+NOTE: Running task 1 of 3729 (/ref/yocto/poky/meta/recipes-devtools/quilt/quilt-native_0.67.bb:do_recipe_qa)
+NOTE: recipe texinfo-dummy-native-1.0-r0: task do_recipe_qa: Started
+NOTE: recipe texinfo-dummy-native-1.0-r0: task do_recipe_qa: Succeeded
+WARNING: squashfs-tools-native-4.6.1-r0 do_fetch: Failed to fetch URL git://github.com/plougher/squashfs-tools.git;protocol=https;branch=v6.1.1, attempting MIRRORS if available
+NOTE: Running noexec task 3729 of 3729 (/ref/yocto/poky/meta/recipes-core/images/core-image-minimal.bb:do_build)
+NOTE: Tasks Summary: Attempted 3729 tasks of which 0 didn't need to be rerun and all succeeded.
+
+Summary: There were 2 WARNING messages.
+'''
+expected = '''
+WARNING: squashfs-tools-native-4.6.1-r0 do_fetch: Failed to fetch URL git://github.com/plougher/squashfs-tools.git;protocol=https;branch=v6.1.1, attempting MIRRORS if available
+NOTE: Tasks Summary: Attempted 3729 tasks of which 0 didn't need to be rerun and all succeeded.
+Summary: There were 2 WARNING messages.
+'''
+
+[[tests.bitbake-build]]
+name = "a failed task keeps the error, its log path, the task log and the summary"
+input = '''
+NOTE: Executing Tasks
+ERROR: rtk-fail-compile-1.0-r0 do_compile: ExecutionError('/work/build/tmp/work/cortexa72-poky-linux/rtk-fail-compile/1.0/temp/run.do_compile.288', 1, None, None)
+ERROR: Logfile of failure stored in: /work/build/tmp/work/cortexa72-poky-linux/rtk-fail-compile/1.0/temp/log.do_compile.288
+Log data follows:
+| DEBUG: Executing shell function do_compile
+| rtk-fail-compile.c:7:9: error: 'count' undeclared (first use in this function)
+|     7 |         count += i;
+| WARNING: exit code 1 from a shell command.
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_compile: Failed
+ERROR: Task (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_compile) failed with exit code '1'
+NOTE: Tasks Summary: Attempted 834 tasks of which 824 didn't need to be rerun and 1 failed.
+
+Summary: 1 task failed:
+  /ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_compile
+    log: /work/build/tmp/work/cortexa72-poky-linux/rtk-fail-compile/1.0/temp/log.do_compile.288
+Summary: There was 1 ERROR message, returning a non-zero exit code.
+'''
+expected = '''
+ERROR: rtk-fail-compile-1.0-r0 do_compile: ExecutionError('/work/build/tmp/work/cortexa72-poky-linux/rtk-fail-compile/1.0/temp/run.do_compile.288', 1, None, None)
+ERROR: Logfile of failure stored in: /work/build/tmp/work/cortexa72-poky-linux/rtk-fail-compile/1.0/temp/log.do_compile.288
+Log data follows:
+| DEBUG: Executing shell function do_compile
+| rtk-fail-compile.c:7:9: error: 'count' undeclared (first use in this function)
+|     7 |         count += i;
+| WARNING: exit code 1 from a shell command.
+NOTE: recipe rtk-fail-compile-1.0-r0: task do_compile: Failed
+ERROR: Task (/ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_compile) failed with exit code '1'
+NOTE: Tasks Summary: Attempted 834 tasks of which 824 didn't need to be rerun and 1 failed.
+Summary: 1 task failed:
+  /ref/yocto/poky/../meta-rpi-ref/recipes-test/rtk-fail-compile/rtk-fail-compile.bb:do_compile
+    log: /work/build/tmp/work/cortexa72-poky-linux/rtk-fail-compile/1.0/temp/log.do_compile.288
+Summary: There was 1 ERROR message, returning a non-zero exit code.
+'''
+
+[[tests.bitbake-build]]
+name = "unknown NOTE lines survive (synthetic server message)"
+input = '''
+NOTE: Reconnecting to bitbake server...
+NOTE: Running task 5 of 10 (/ref/x.bb:do_fetch)
+'''
+expected = "NOTE: Reconnecting to bitbake server..."
+
+[[tests.bitbake-e]]
+name = "history comments and blank lines go, values and functions stay"
+input = '''
+Loading cache...done.
+#
+# $MACHINE [2 operations]
+#   set? /work/build/conf/local.conf:4
+#     "raspberrypi4-64"
+# pre-expansion value:
+#   "raspberrypi4-64"
+MACHINE="raspberrypi4-64"
+
+do_compile() {
+	oe_runmake
+}
+'''
+expected = '''
+MACHINE="raspberrypi4-64"
+do_compile() {
+	oe_runmake
+}
+'''
+
+[[tests.bitbake-getvar]]
+name = "keeps the value and each operation with file:line, drops doc text and the unexpanded copy"
+input = '''
+#
+# $SRC_URI [3 operations]
+#   set /ref/yocto/poky/meta/conf/documentation.conf:394
+#     [doc] "The list of source files - local or remote."
+#   set /ref/yocto/poky/meta/recipes-core/busybox/busybox_1.36.1.bb:70
+#     "https://busybox.net/downloads/busybox-${PV}.tar.bz2;name=tarball"
+#   :append[libc-musl] /ref/yocto/poky/meta/recipes-core/busybox/busybox_1.36.1.bb:71
+#     " file://musl.cfg "
+# pre-expansion value:
+#   "https://busybox.net/downloads/busybox-${PV}.tar.bz2;name=tarball"
+SRC_URI="https://busybox.net/downloads/busybox-1.36.1.tar.bz2;name=tarball"
+'''
+expected = '''
+# $SRC_URI [3 operations]
+#   set /ref/yocto/poky/meta/conf/documentation.conf:394
+#   set /ref/yocto/poky/meta/recipes-core/busybox/busybox_1.36.1.bb:70
+#     "https://busybox.net/downloads/busybox-${PV}.tar.bz2;name=tarball"
+#   :append[libc-musl] /ref/yocto/poky/meta/recipes-core/busybox/busybox_1.36.1.bb:71
+#     " file://musl.cfg "
+SRC_URI="https://busybox.net/downloads/busybox-1.36.1.tar.bz2;name=tarball"
+'''
+
+[[tests.bitbake-s]]
+name = "padding shrinks, columns after the version keep their alignment"
+input = '''
+Loading cache...done.
+Loaded 1925 entries from dependency cache.
+Recipe Name                                    Latest Version         Preferred Version          Required Version
+===========                                    ==============         =================          ================
+
+acl                                                 :2.3.2-r0                                                    
+linux-raspberrypi                    1:6.6.63+git-r0                 :6.1-r0                      
+'''
+expected = '''
+Recipe Name                                    Latest Version         Preferred Version          Required Version
+=========== ==============         =================          ================
+acl :2.3.2-r0
+linux-raspberrypi 1:6.6.63+git-r0                 :6.1-r0
+'''
+
+[[tests.bitbake-listtasks]]
+name = "keeps the task table"
+input = '''
+Loading cache...done.
+NOTE: Resolving any missing task queue dependencies
+Initialising tasks...Sstate summary: Wanted 0 Local 0 Mirrors 0 Missed 0 Current 0 (0% match, 0% complete)
+done.
+NOTE: No setscene tasks
+NOTE: Executing Tasks
+do_build                              Default task for a recipe - depends on all other normal tasks required to 'build' a recipe
+do_compile                            Compiles the source in the compilation directory
+NOTE: Tasks Summary: Attempted 1 tasks of which 0 didn't need to be rerun and all succeeded.
+'''
+expected = '''
+do_build                              Default task for a recipe - depends on all other normal tasks required to 'build' a recipe
+do_compile                            Compiles the source in the compilation directory
+NOTE: Tasks Summary: Attempted 1 tasks of which 0 didn't need to be rerun and all succeeded.
+'''
+
+[[tests.bitbake-g]]
+name = "keeps the names of the written files"
+input = '''
+Loading cache...done.
+Loaded 1925 entries from dependency cache.
+NOTE: Resolving any missing task queue dependencies
+NOTE: PN build list saved to 'pn-buildlist'
+NOTE: Task dependencies saved to 'task-depends.dot'
+'''
+expected = '''
+NOTE: PN build list saved to 'pn-buildlist'
+NOTE: Task dependencies saved to 'task-depends.dot'
+'''
+
+[[tests.bitbake-layers]]
+name = "show-layers: chatter goes, padding collapses"
+input = '''
+NOTE: Starting bitbake server...
+layer                 path                                                                    priority
+========================================================================================================
+core                  /ref/yocto/poky/meta                                                    5
+rpi-ref               /ref/yocto/poky/../meta-rpi-ref                                         10
+'''
+expected = '''
+layer path priority
+========================================================================================================
+core /ref/yocto/poky/meta 5
+rpi-ref /ref/yocto/poky/../meta-rpi-ref 10
+'''
+
+[[tests.bitbake-layers]]
+name = "show-recipes: per-layer lines keep their indentation"
+input = '''
+=== Available recipes: ===
+acl:
+  meta                 2.3.2
+'''
+expected = '''
+=== Available recipes: ===
+acl:
+  meta 2.3.2
+'''
+
+[[tests.buildroot-make]]
+name = "a clean build is reported as one line"
+input = '''
+>>> host-m4 1.4.21 Downloading
+     0K .......... .......... .......... .......... ..........  2% 6.18M 0s
+checking for gcc... /usr/bin/gcc
+  CC       libm4_a-error.o
+  Enable SUID configuration via /etc/busybox.conf (FEATURE_SUID_CONFIG) [N/y/?] n
+/usr/include/features.h:196:3: warning: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
+>>>   Executing post-image script board/raspberrypi/post-image.sh
+INFO: hdimage(sdcard.img): writing MBR
+'''
+expected = "buildroot: OK"
+
+[[tests.buildroot-make]]
+name = "ignored make errors are not failures"
+input = '''
+>>> host-e2fsprogs 1.47.3 Installing to host directory
+make[3]: [Makefile:379: libext2fs.dvi] Error 127 (ignored)
+'''
+expected = "buildroot: OK"
+
+[[tests.buildroot-make]]
+name = "a defconfig is reported as one line"
+input = '''
+/usr/bin/gcc -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>" -c conf.c -o /work/output/build/buildroot-config/conf.o
+  GEN     /work/output/Makefile
+#
+# configuration written to /work/output/.config
+#
+'''
+expected = "buildroot: OK"
+
+[[tests.buildroot-make]]
+name = "a compile failure keeps steps, errors, source excerpt and *** lines"
+input = '''
+>>> rtk-fail-compile 1.0 Syncing from source dir /ref/buildroot/external/package/rtk-fail-compile/src
+rsync -au --chmod=u=rwX,go=rX  --exclude .svn --exclude .git /ref/buildroot/external/package/rtk-fail-compile/src/ /work/output/build/rtk-fail-compile-1.0
+>>> rtk-fail-compile 1.0 Configuring
+>>> rtk-fail-compile 1.0 Building
+/work/output/host/bin/aarch64-linux-gcc -D_LARGEFILE_SOURCE -O2 -g0 -o /work/output/build/rtk-fail-compile-1.0/rtk-fail-compile /work/output/build/rtk-fail-compile-1.0/rtk-fail-compile.c
+/work/output/build/rtk-fail-compile-1.0/rtk-fail-compile.c: In function ‘main’:
+/work/output/build/rtk-fail-compile-1.0/rtk-fail-compile.c:7:9: error: ‘count’ undeclared (first use in this function)
+    7 |         count += i;
+      |         ^~~~~
+make[1]: *** [package/pkg-generic.mk:273: /work/output/build/rtk-fail-compile-1.0/.stamp_built] Error 1
+make: *** [Makefile:23: _all] Error 2
+'''
+expected = '''
+>>> rtk-fail-compile 1.0 Syncing from source dir /ref/buildroot/external/package/rtk-fail-compile/src
+>>> rtk-fail-compile 1.0 Configuring
+>>> rtk-fail-compile 1.0 Building
+/work/output/build/rtk-fail-compile-1.0/rtk-fail-compile.c: In function ‘main’:
+/work/output/build/rtk-fail-compile-1.0/rtk-fail-compile.c:7:9: error: ‘count’ undeclared (first use in this function)
+    7 |         count += i;
+      |         ^~~~~
+make[1]: *** [package/pkg-generic.mk:273: /work/output/build/rtk-fail-compile-1.0/.stamp_built] Error 1
+make: *** [Makefile:23: _all] Error 2
+'''
+
+[[tests.buildroot-make]]
+name = "a configure failure keeps the configure error"
+input = '''
+>>> foo 1.0 Configuring
+checking for gcc... /work/output/host/bin/aarch64-linux-gcc
+checking whether the C compiler works... no
+configure: error: C compiler cannot create executables
+make: *** [package/pkg-generic.mk:280: /work/output/build/foo-1.0/.stamp_configured] Error 1
+'''
+expected = '''
+>>> foo 1.0 Configuring
+configure: error: C compiler cannot create executables
+make: *** [package/pkg-generic.mk:280: /work/output/build/foo-1.0/.stamp_configured] Error 1
+'''
+
+[[tests.buildroot-make]]
+name = "output that is not a build passes through"
+input = '''
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+'''
+expected = '''
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+'''
+
+[[tests.buildroot-printvars]]
+name = "values pass verbatim, however long"
+input = '''
+BUSYBOX_ACTUAL_SOURCE_SITE=https://www.busybox.net/downloads
+BUSYBOX_ADDITIONAL_DOWNLOADS=
+BUSYBOX_ALL_DOWNLOADS=https+https://www.busybox.net/downloads/busybox-1.37.0.tar.bz2 
+'''
+expected = '''
+BUSYBOX_ACTUAL_SOURCE_SITE=https://www.busybox.net/downloads
+BUSYBOX_ADDITIONAL_DOWNLOADS=
+BUSYBOX_ALL_DOWNLOADS=https+https://www.busybox.net/downloads/busybox-1.37.0.tar.bz2 
+'''
+
+[[tests.buildroot-show-targets]]
+name = "list-defconfigs drops only the redundant description"
+input = '''
+Built-in configs:
+  aarch64_efi_defconfig               - Build for aarch64_efi
+  raspberrypi4_64_defconfig           - Build for raspberrypi4_64
+  my_board_defconfig                  - Build for a different board
+'''
+expected = '''
+Built-in configs:
+  aarch64_efi_defconfig
+  raspberrypi4_64_defconfig
+  my_board_defconfig                  - Build for a different board
+'''
+
+[[tests.buildroot-show-targets]]
+name = "show-targets word list passes through"
+input = "busybox host-acl host-attr host-autoconf rpi-firmware skeleton toolchain"
+expected = "busybox host-acl host-attr host-autoconf rpi-firmware skeleton toolchain"
+
+[[tests.buildroot-depends]]
+name = "dependency list passes through"
+input = "host-skeleton kmod skeleton toolchain"
+expected = "host-skeleton kmod skeleton toolchain"
+
+[[tests.buildroot-legal-info]]
+name = "keeps steps, errors, warnings and summary; drops per-file OK checks"
+input = '''
+>>> linux custom Collecting legal info
+COPYING: OK (sha256: fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0)
+ERROR: No hash found for LICENSES/preferred/GPL-2.0
+>>> host-bison 3.8.2 Collecting legal info
+COPYING: OK (sha256: 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903)
+WARNING: the Buildroot source code has not been saved
+Legal info produced in /work/output/legal-info
+'''
+expected = '''
+>>> linux custom Collecting legal info
+ERROR: No hash found for LICENSES/preferred/GPL-2.0
+>>> host-bison 3.8.2 Collecting legal info
+WARNING: the Buildroot source code has not been saved
+Legal info produced in /work/output/legal-info
+'''
