@@ -1,8 +1,9 @@
 #!/bin/bash
 # Replay the Yocto captures through an rtk binary that ships the built-in `bitbake` filter
 # (upstream rtk-ai/rtk, src/filters/bitbake.toml) and check that no ERROR/WARNING/failure-location
-# line is lost. Only built-in filters apply: the run uses an empty HOME, a scratch tracking DB,
-# no tee, and a working directory without .rtk/filters.toml.
+# line is lost. Only built-in filters apply: the run uses an empty HOME, a scratch tracking DB and
+# a working directory without .rtk/filters.toml. Tee stays on, as in a default install, so the
+# `[full output: rtk recall ...]` hint of a failing run counts toward the filtered bytes.
 #
 #   scripts/verify-upstream-bitbake.sh <path/to/rtk>
 #
@@ -17,7 +18,7 @@ S=$(mktemp -d); trap 'rm -rf "$S"' EXIT
 mkdir -p "$S/home" "$S/run"; cd "$S/run" || exit 1
 
 run() {
-    env -i HOME="$S/home" PATH="$ROOT/scripts/shim:/usr/bin:/bin" RTK_TEE=0 RTK_DB_PATH="$S/home/rtk.db" \
+    env -i HOME="$S/home" PATH="$ROOT/scripts/shim:/usr/bin:/bin" RTK_DB_PATH="$S/home/rtk.db" \
         RTK_SAMPLE="$ROOT/samples/yocto/$1.log" RTK_SAMPLE_EXIT="$2" "$R" "${@:3}" 2>&1
 }
 noansi() { sed 's/\x1b\[[0-9;]*[A-Za-z]//g'; }
