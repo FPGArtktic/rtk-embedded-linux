@@ -1,0 +1,3 @@
+[submodule "examples/rpi"]
+	path = examples/rpi
+	url = https://github.com/FPGArtktic/rpi-yocto-buildroot-ref.git
