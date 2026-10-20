@@ -12,6 +12,11 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 TOML=${RTK_FILTERS:-$ROOT/.rtk/filters.toml}
 
+# ripgrep ships as `rg`; some systems install or link it as `ripgrep`. Shell aliases are not
+# visible to scripts, so an alias-only setup sets RG=/path/to/binary instead.
+RG=${RG:-$(command -v rg || command -v ripgrep || true)}
+[ -n "$RG" ] || { echo "rg-fallback.sh: ripgrep not found (looked for rg and ripgrep; set RG=)" >&2; exit 127; }
+
 [ $# -ge 1 ] || { echo "usage: ${0##*/} <filter-name> [log-file]" >&2; exit 2; }
 name=$1
 input=${2:-/dev/stdin}
@@ -40,5 +45,5 @@ fi
 
 # rg exits 1 when no line survives; that is a valid (empty) result here.
 stage \
-    | { if [ -s "$tmp/strip" ]; then rg --no-config -v -f "$tmp/strip" || [ $? -eq 1 ]; else cat; fi; } \
-    | { if [ -s "$tmp/keep" ];  then rg --no-config    -f "$tmp/keep"  || [ $? -eq 1 ]; else cat; fi; }
+    | { if [ -s "$tmp/strip" ]; then "$RG" --no-config -v -f "$tmp/strip" || [ $? -eq 1 ]; else cat; fi; } \
+    | { if [ -s "$tmp/keep" ];  then "$RG" --no-config    -f "$tmp/keep"  || [ $? -eq 1 ]; else cat; fi; }
