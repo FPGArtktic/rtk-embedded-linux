@@ -662,5 +662,7 @@ Buildroot build about an hour.
 
 ## License
 
-GPL-3.0-only, see [LICENSE](LICENSE). The reference design in `examples/rpi` is a separate repository with its
+GPL-3.0-only, see [LICENSE](LICENSE), except the filters in `.rtk/filters.toml`, which are Apache-2.0
+(see [LICENSES/Apache-2.0.txt](LICENSES/Apache-2.0.txt)), the license of rtk itself, so they can go into rtk
+unchanged. The reference design in `examples/rpi` is a separate repository with its
 own license, and its submodules (Poky, meta-raspberrypi, Buildroot) are under theirs.

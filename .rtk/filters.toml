@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2026 FPGArtktic
+#
 # rtk filters for Yocto (BitBake) and Buildroot.  https://github.com/FPGArtktic/rtk-embedded-linux
 #
 # One file for every runtime. Each match_command is the prefix P followed by a tool-specific tail.
