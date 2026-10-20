@@ -1,0 +1,6 @@
+#!/bin/sh
+# Offline replay: print a captured sample instead of running the tool (CLAUDE.md §9).
+#   RTK_SAMPLE       path to samples/<dir>/<name>.log   (required)
+#   RTK_SAMPLE_EXIT  exit status to return               (default: 0)
+cat "${RTK_SAMPLE:?RTK_SAMPLE must point to a captured sample}" || exit
+exit "${RTK_SAMPLE_EXIT:-0}"
